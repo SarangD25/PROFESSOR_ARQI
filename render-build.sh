@@ -1,11 +1,11 @@
 #!/bin/bash
 set -e
 
-echo "==> Installing Wasp CLI via npm..."
-npm install -g @wasp.sh/wasp-cli
+echo "==> Installing Wasp CLI..."
+npm install @wasp.sh/wasp-cli
 
 echo "==> Building Wasp project..."
-wasp build
+npx wasp build
 
 echo "==> Installing server dependencies..."
 cd .wasp/build
