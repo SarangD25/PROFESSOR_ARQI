@@ -1,0 +1,334 @@
+import { hashToken, verifyQRSignature } from '../utils/crypto.js';
+import { getRelevantContext } from '../utils/rag.js';
+import { callOllama } from '../utils/ollama.js';
+
+function withTimeout(promise, ms) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) => setTimeout(() => reject(new Error('LLM timeout')), ms))
+  ]);
+}
+
+// Check if an object looks like a question (flexible field names)
+function isQuestionObj(obj) {
+  if (!obj || typeof obj !== 'object') return false;
+  return obj.text || obj.question || obj.prompt || obj.q || obj.statement;
+}
+
+// Normalize a question object to have standard field names
+function normalizeQuestion(obj) {
+  return {
+    text: obj.text || obj.question || obj.prompt || obj.q || obj.statement || 'Question',
+    type: obj.type || 'MCQ',
+    options: obj.options || obj.choices || obj.answers || [],
+    correctAnswer: obj.correctAnswer || obj.correct_answer || obj.answer || obj.correct || 'N/A',
+    marks: obj.marks || obj.mark || 2,
+    negativeMarks: obj.negativeMarks || obj.negative_marks || obj.penalty || 0,
+    concept: obj.concept || obj.topic || obj.subject || 'General'
+  };
+}
+
+// Recursively find an array of question objects from any parsed structure
+function findQuestionsArray(data) {
+  if (Array.isArray(data) && data.length > 0 && isQuestionObj(data[0])) {
+    return data.map(normalizeQuestion);
+  }
+  if (typeof data === 'string') {
+    try { return findQuestionsArray(JSON.parse(data)); } catch(e) {}
+  }
+  if (data && typeof data === 'object' && !Array.isArray(data)) {
+    for (const val of Object.values(data)) {
+      const found = findQuestionsArray(val);
+      if (found) return found;
+    }
+  }
+  return null;
+}
+
+// Try every possible way to extract questions from LLM text
+function extractQuestions(text) {
+  // Method 1: Direct parse
+  try {
+    const parsed = JSON.parse(text);
+    const arr = findQuestionsArray(parsed);
+    if (arr) { console.error('[QParse] Method 1 OK'); return arr; }
+    console.error('[QParse] M1: parsed but no questions. Type:', typeof parsed, 'isArray:', Array.isArray(parsed));
+  } catch(e) {
+    console.error('[QParse] M1 parse error:', e.message?.substring(0, 80));
+  }
+
+  // Method 2: Regex extract array
+  const match = text.match(/\[[\s\S]*\]/);
+  if (match) {
+    try {
+      const parsed = JSON.parse(match[0]);
+      const arr = findQuestionsArray(parsed);
+      if (arr) { console.error('[QParse] Method 2 OK'); return arr; }
+      console.error('[QParse] M2: parsed but no questions');
+    } catch(e) {
+      console.error('[QParse] M2 parse error:', e.message?.substring(0, 80));
+    }
+  } else {
+    console.error('[QParse] M2: no [ ] found in text');
+  }
+
+  // Method 3: Find first [ and last ]
+  const start = text.indexOf('[');
+  const end = text.lastIndexOf(']');
+  if (start !== -1 && end > start) {
+    try {
+      const sub = text.substring(start, end + 1);
+      const parsed = JSON.parse(sub);
+      const arr = findQuestionsArray(parsed);
+      if (arr) { console.error('[QParse] Method 3 OK'); return arr; }
+    } catch(e) {
+      console.error('[QParse] M3 parse error:', e.message?.substring(0, 80));
+    }
+  }
+
+  // Method 4: Last resort - try to find individual JSON objects
+  console.error('[QParse] All methods failed. First 300 chars:', text.substring(0, 300));
+  return null;
+}
+
+// Clean LLM response and parse JSON
+function cleanAndParse(response) {
+  if (!response) return null;
+  let cleaned = response
+    .replace(/```json\s*/gi, '').replace(/```\s*/g, '')
+    .replace(/,\s*\]/g, ']').replace(/,\s*\}/g, '}')
+    .trim();
+  const arr = extractQuestions(cleaned);
+  if (!arr) { console.error('[QParse] extractQuestions returned null'); return null; }
+  console.error('[QParse] Raw questions found:', arr.length);
+  
+  // Normalize and lightly validate
+  const result = arr.map(q => {
+    let opts = Array.isArray(q.options) ? q.options : [];
+    return {
+      text: q.text || 'Question',
+      type: q.type || 'MCQ',
+      options: opts,
+      correctAnswer: q.correctAnswer || (q.type === 'MSQ' ? [] : opts[0] || 'N/A'),
+      marks: q.marks || 2,
+      negativeMarks: q.negativeMarks || 0,
+      concept: q.concept || 'General'
+    };
+  }).filter(q => {
+    // Reject questions with no real text
+    if (!q.text || q.text === 'Question' || q.text.length < 10) return false;
+    // Reject MCQ/MSQ with no options or less than 2 options
+    if ((q.type === 'MCQ' || q.type === 'MSQ') && (!q.options || q.options.length < 2)) return false;
+    // Reject options that are empty strings
+    if (q.options.some(o => !o || o.trim() === '')) {
+      q.options = q.options.filter(o => o && o.trim() !== '');
+      if (q.options.length < 2 && q.type !== 'NAT') return false;
+    }
+    return true;
+  }).slice(0, 15); // Cap at 15 questions
+  console.error('[QParse] Validated questions:', result.length);
+  return result.length >= 1 ? result : null;
+}
+
+// Full 15-question generation
+async function generateFromOllama(campaign, difficulty, seed) {
+  try {
+    const prompt = `You must respond with valid JSON only. Generate 15 ${campaign.topic} questions for ${campaign.examName}. Difficulty: ${difficulty}. Seed: ${seed}.
+5 MCQ (1 correct from 4), 5 MSQ (2+ correct from 4, correctAnswer is array), 5 NAT (numeric answer, no options).
+Each option must be a COMPLETE descriptive sentence, NOT just "Option A" or single letters.
+Return a JSON object: {"questions":[{"text":"...","type":"MCQ","options":["full sentence 1","full sentence 2","full sentence 3","full sentence 4"],"correctAnswer":"full sentence 1","marks":2,"negativeMarks":0.67,"concept":"${campaign.topic}"}]}`;
+
+    const response = await withTimeout(callOllama(prompt, undefined, true), 300000);
+    console.error('[QParse] Attempt 1 response length:', response?.length);
+    const questions = cleanAndParse(response);
+    if (questions && questions.length >= 1) {
+      console.error('[QParse] Attempt 1 SUCCESS:', questions.length, 'questions');
+      return questions;
+    }
+  } catch(e) {
+    console.error('[QParse] Attempt 1 error:', e.message);
+  }
+  return null;
+}
+
+// Simple 5-question fallback generation (faster, more likely to succeed)
+async function generateFromOllamaSimple(campaign, difficulty) {
+  try {
+    const prompt = `You must respond with valid JSON only. Create 5 MCQ questions about ${campaign.topic} for ${campaign.examName} (${difficulty}).
+Each question needs 4 complete answer options (full sentences).
+Return JSON: {"questions":[{"text":"question?","type":"MCQ","options":["answer1","answer2","answer3","answer4"],"correctAnswer":"answer1","marks":2,"negativeMarks":0.67,"concept":"${campaign.topic}"}]}`;
+
+    const response = await withTimeout(callOllama(prompt, undefined, true), 120000);
+    console.error('[QParse] Attempt 2 response length:', response?.length);
+    const questions = cleanAndParse(response);
+    if (questions && questions.length >= 1) {
+      console.error('[QParse] Attempt 2 SUCCESS:', questions.length, 'questions');
+      return questions;
+    }
+  } catch(e) {
+    console.error('[QParse] Attempt 2 error:', e.message);
+  }
+  return null;
+}
+
+export async function getPaper(args, context) {
+  const { token } = args;
+  const tokenHash = hashToken(token);
+  const qrPaper = await context.entities.QRPaper.findUnique({
+    where: { token: tokenHash },
+    include: { campaign: true }
+  });
+  if (!qrPaper) throw new Error('Invalid or expired QR code');
+
+  const payload = await verifyQRSignature(qrPaper.signature);
+  if (!payload) throw new Error('Invalid QR signature');
+
+  let questionSet = await context.entities.QuestionSet.findFirst({
+    where: { qrPaperId: qrPaper.id }
+  });
+
+  if (qrPaper.isUsed && !questionSet) throw new Error('QR code already used');
+
+  if (!questionSet) {
+    const campaign = qrPaper.campaign;
+    const weakAreas = await context.entities.WeakArea.findMany({
+      where: { studentId: qrPaper.studentId || 'none' }
+    });
+    const weakConcepts = weakAreas.filter(w => w.strength < 0.5).map(w => w.concept);
+    const difficulty = qrPaper.difficulty || campaign.difficulty;
+    const uniqueSeed = Math.floor(Math.random() * 99999);
+
+    let questions = [];
+    // Attempt 1: Full prompt — accept ANY questions
+    const batch1 = await generateFromOllama(campaign, difficulty, uniqueSeed);
+    if (batch1) questions.push(...batch1);
+
+    // Attempt 2: If we have less than 10, try to get more
+    if (questions.length < 10) {
+      console.error('[QParse] Got', questions.length, 'from attempt 1, trying attempt 2...');
+      const batch2 = await generateFromOllamaSimple(campaign, difficulty);
+      if (batch2) questions.push(...batch2);
+    }
+
+    console.error('[QParse] Total LLM questions:', questions.length);
+
+    // Pad with fallback to reach 15
+    if (questions.length < 15) {
+      const fallback = generateFallbackQuestions(campaign.topic, campaign.examName, difficulty);
+      questions.push(...fallback.slice(0, 15 - questions.length));
+    }
+
+    questionSet = await context.entities.QuestionSet.create({
+      data: {
+        qrPaperId: qrPaper.id,
+        questions: JSON.stringify(questions),
+        version: 1,
+        weakConcepts: weakConcepts
+      }
+    });
+
+    await context.entities.QRPaper.update({
+      where: { id: qrPaper.id },
+      data: { isUsed: true }
+    });
+  }
+
+  return {
+    paperId: qrPaper.id,
+    campaign: qrPaper.campaign,
+    questions: JSON.parse(questionSet.questions),
+    questionSetId: questionSet.id
+  };
+}
+
+function generateFallbackQuestions(topic, examName, difficulty) {
+  const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+  const pick = (arr, n) => { const s = [...arr].sort(() => Math.random() - 0.5); return s.slice(0, n); };
+  const shuffle = (arr) => [...arr].sort(() => Math.random() - 0.5);
+
+  // ──── MCQ Pool (20 templates) ────
+  const mcqPool = [
+    { q: `In ${topic}, what determines the efficiency of a given approach?`, o: [`Time and space complexity analysis`, `Visual appearance of the output`, `Number of team members involved`, `Programming language color scheme`] },
+    { q: `Which principle is central to mastering ${topic}?`, o: [`Understanding underlying data structures`, `Memorizing all formulas without context`, `Avoiding practice problems entirely`, `Using only one reference textbook`] },
+    { q: `What happens when ${topic} concepts are applied incorrectly in ${examName}?`, o: [`Results become unreliable and may produce errors`, `The system automatically corrects itself`, `Performance always improves regardless`, `Nothing changes in the output`] },
+    { q: `A ${topic} problem requires processing ${rand(50, 500)} elements. Which factor matters most?`, o: [`The algorithm's time complexity`, `The screen resolution used`, `The font size of the code`, `The color of the IDE theme`] },
+    { q: `In ${examName}, why is ${topic} considered a prerequisite for advanced courses?`, o: [`It builds foundational problem-solving skills`, `It is the easiest subject available`, `It has no connection to other subjects`, `Advanced courses never reference it`] },
+    { q: `If a ${topic} operation takes O(n^2) time for ${rand(10, 100)} inputs, which optimization would help most?`, o: [`Reducing it to O(n log n) using divide and conquer`, `Adding more comments to the code`, `Increasing the input size further`, `Removing all error handling`] },
+    { q: `Which real-world scenario best demonstrates ${topic} principles?`, o: [`Routing packets efficiently across a network`, `Choosing paint colors for walls`, `Arranging furniture in a room`, `Selecting music for a playlist randomly`] },
+    { q: `A student studying ${topic} for ${examName} should prioritize:`, o: [`Problem-solving with diverse question types`, `Memorizing textbook pages word by word`, `Skipping all numerical problems`, `Only studying the night before the exam`] },
+    { q: `What distinguishes expert-level understanding of ${topic}?`, o: [`Ability to optimize and analyze tradeoffs`, `Speed of typing code`, `Number of textbooks purchased`, `Amount of time spent in class`] },
+    { q: `In ${topic}, a system processes ${rand(100, 1000)} requests per second. What is the bottleneck likely to be?`, o: [`Memory allocation and I/O operations`, `The brand of monitor used`, `The keyboard layout preference`, `The desktop wallpaper selection`] },
+    { q: `Which methodology is most effective for solving ${topic} problems in ${examName}?`, o: [`Breaking problems into smaller subproblems`, `Solving everything in a single step`, `Ignoring edge cases entirely`, `Using the same approach for every problem`] },
+    { q: `A ${rand(3, 8)}-stage pipeline in ${topic} improves throughput by:`, o: [`Allowing concurrent execution of stages`, `Reducing the number of stages to one`, `Eliminating all intermediate storage`, `Increasing latency at every stage`] },
+    { q: `Which error is most common when implementing ${topic} solutions?`, o: [`Off-by-one errors in loop boundaries`, `Using too many variable names`, `Writing too many comments`, `Making the code too readable`] },
+    { q: `For ${examName} preparation in ${topic}, which resource is most valuable?`, o: [`Previous year question papers with solutions`, `Random internet articles without verification`, `Only the table of contents of textbooks`, `Social media discussions about unrelated topics`] },
+    { q: `What makes ${topic} challenging compared to other ${examName} subjects?`, o: [`It requires both theoretical and practical understanding`, `It has no formulas to learn`, `All questions have obvious answers`, `It never appears in competitive exams`] },
+    { q: `In ${topic}, when input size grows from ${rand(10, 50)} to ${rand(500, 5000)}, what must be considered?`, o: [`Scalability and algorithmic efficiency`, `Only the aesthetic quality of output`, `Whether the printer is connected`, `The size of the monitor screen`] },
+    { q: `A ${topic} solution with ${rand(2, 6)} recursive calls per level has what characteristic?`, o: [`Exponential time complexity without memoization`, `Always constant time regardless of input`, `Linear space with no overhead`, `Zero memory usage at runtime`] },
+    { q: `Which testing approach best validates ${topic} implementations?`, o: [`Testing with edge cases and boundary values`, `Only testing with the example from the textbook`, `Skipping all tests and submitting directly`, `Testing only when the code fails to compile`] },
+    { q: `Why is ${topic} repeatedly tested in ${examName} examinations?`, o: [`It evaluates analytical and logical reasoning`, `Examiners have no other topics to choose`, `Students always score full marks in it`, `It requires no calculation whatsoever`] },
+    { q: `In ${topic}, what is the impact of choosing the wrong data structure?`, o: [`Significant performance degradation`, `Automatic correction by the compiler`, `No impact on any metric`, `The program runs faster regardless`] },
+  ];
+
+  // ──── MSQ Pool (15 templates) ────
+  const msqPool = [
+    { q: `Select ALL valid optimization techniques in ${topic}:`, o: [`Caching frequently accessed results`, `Using appropriate data structures`, `Ignoring all time constraints`, `Reducing redundant computations`], c: [0, 1, 3] },
+    { q: `Which of these are measurable metrics in ${topic}?`, o: [`Execution time in milliseconds`, `Memory usage in bytes`, `Aesthetic appeal of variable names`, `Number of correct outputs`], c: [0, 1, 3] },
+    { q: `In ${examName}, which ${topic} concepts appear most frequently?`, o: [`Complexity analysis`, `Data representation`, `Unrelated historical facts`, `Algorithm design paradigms`], c: [0, 1, 3] },
+    { q: `Select ALL approaches that improve ${topic} problem-solving:`, o: [`Drawing diagrams before coding`, `Analyzing sample inputs and outputs`, `Rushing to code without planning`, `Identifying patterns in the problem`], c: [0, 1, 3] },
+    { q: `Which properties must a correct ${topic} solution satisfy?`, o: [`Handles all edge cases properly`, `Produces correct output for valid input`, `Crashes when given empty input`, `Terminates within time constraints`], c: [0, 1, 3] },
+    { q: `In ${topic}, which factors affect space complexity?`, o: [`Size of auxiliary data structures`, `Number of recursive call stack frames`, `Color of terminal background`, `Amount of input data stored`], c: [0, 1, 3] },
+    { q: `Select ALL statements true about ${topic} in competitive exams:`, o: [`Multiple approaches can solve the same problem`, `Time limits require efficient solutions`, `Every problem has exactly one solution method`, `Understanding tradeoffs is essential`], c: [0, 1, 3] },
+    { q: `Which debugging strategies are effective for ${topic} problems?`, o: [`Tracing execution with small inputs`, `Adding print statements at key points`, `Deleting all code and starting over every time`, `Comparing output with expected results`], c: [0, 1, 3] },
+    { q: `What are valid representations of ${topic} solutions?`, o: [`Pseudocode with clear logic`, `Flowcharts showing decision paths`, `Abstract poetry about the problem`, `Mathematical proofs of correctness`], c: [0, 1, 3] },
+    { q: `In ${topic}, which skills are tested in ${examName}?`, o: [`Analytical reasoning under time pressure`, `Pattern recognition in problems`, `Handwriting quality in answers`, `Speed of page turning`], c: [0, 1] },
+    { q: `Select ALL characteristics of an optimal ${topic} solution:`, o: [`Minimal time complexity for the problem class`, `Efficient memory utilization`, `Maximum number of lines of code`, `Handles boundary conditions gracefully`], c: [0, 1, 3] },
+    { q: `Which resources help in ${topic} preparation for ${examName}?`, o: [`Solved examples with step-by-step breakdown`, `Practice problems of increasing difficulty`, `Only reading theory without practice`, `Timed mock tests simulating exam conditions`], c: [0, 1, 3] },
+    { q: `What aspects of ${topic} require regular practice?`, o: [`Implementing solutions from scratch`, `Analyzing time complexity of new problems`, `Just reading solved examples passively`, `Identifying the right approach for a problem type`], c: [0, 1, 3] },
+    { q: `In ${topic}, which mistakes commonly lead to wrong answers in ${examName}?`, o: [`Not considering edge cases like empty input`, `Integer overflow in large computations`, `Writing too many comments`, `Incorrect loop termination conditions`], c: [0, 1, 3] },
+    { q: `Select ALL benefits of mastering ${topic}:`, o: [`Better performance in technical interviews`, `Improved logical thinking ability`, `Guaranteed admission without other subjects`, `Foundation for advanced computer science topics`], c: [0, 1, 3] },
+  ];
+
+  // ──── NAT Pool (15 templates with random values) ────
+  const a1 = rand(20, 200), b1 = rand(2, 10);
+  const a2 = rand(50, 95), b2 = rand(100, 500);
+  const a3 = rand(2, 8);
+  const a4 = rand(5, 50), b4 = rand(2, 8);
+  const a5 = rand(100, 999), b5 = rand(2, 5);
+  const natPool = [
+    { q: `In ${topic}, a process handles ${a1} tasks in ${b1} seconds. Calculate the throughput (tasks/second).`, a: (a1/b1).toFixed(3) },
+    { q: `A ${topic} system operates at ${a2}% efficiency with a total capacity of ${b2} units. What is the effective output?`, a: (a2*b2/100).toFixed(3) },
+    { q: `If ${a3} equal components in a ${topic} system share the total load, what percentage does each handle?`, a: (100/a3).toFixed(3) },
+    { q: `In ${topic}, a value of ${a4} is multiplied by ${b4}. What is the result?`, a: (a4*b4).toFixed(3) },
+    { q: `A ${topic} buffer has ${a5} bytes. If divided into ${b5} equal segments, how many bytes per segment?`, a: (a5/b5).toFixed(3) },
+    { q: `In ${topic}, if latency is ${rand(10,100)}ms per stage across ${rand(3,7)} stages, what is total pipeline latency in ms?`, a: (() => { const l=rand(10,100), s=rand(3,7); return (l*s).toFixed(3); })() },
+    { q: `A ${topic} cache has a hit rate of ${rand(70,99)}% over ${rand(100,1000)} requests. How many cache misses occurred?`, a: (() => { const h=rand(70,99), r=rand(100,1000); return (r*(100-h)/100).toFixed(3); })() },
+    { q: `In ${topic}, a tree of height ${rand(3,8)} has maximum ${(() => { const h=rand(3,8); return `2^${h} = ?`; })()} leaf nodes. Calculate the value.`, a: (() => { const h=rand(3,8); return Math.pow(2,h).toFixed(3); })() },
+    { q: `A ${topic} sorting algorithm makes ${rand(5,20)} comparisons per pass over ${rand(3,10)} passes. Total comparisons?`, a: (() => { const c=rand(5,20), p=rand(3,10); return (c*p).toFixed(3); })() },
+    { q: `In ${topic}, if throughput doubles from ${rand(10,50)} ops/sec, what is the new throughput?`, a: (() => { const t=rand(10,50); return (t*2).toFixed(3); })() },
+    { q: `A ${topic} queue processes ${rand(5,30)} items per minute. How many items in ${rand(2,10)} minutes?`, a: (() => { const r=rand(5,30), m=rand(2,10); return (r*m).toFixed(3); })() },
+    { q: `In ${topic}, the probability of success is ${rand(60,95)}%. Out of ${rand(20,100)} trials, expected successes?`, a: (() => { const p=rand(60,95), n=rand(20,100); return (n*p/100).toFixed(3); })() },
+    { q: `A ${topic} network has ${rand(4,12)} nodes each with ${rand(2,5)} connections. Total connections (undirected)?`, a: (() => { const n=rand(4,12), c=rand(2,5); return (n*c/2).toFixed(3); })() },
+    { q: `In ${topic}, data transfer rate is ${rand(10,100)} MB/s. Time to transfer ${rand(100,1000)} MB (in seconds)?`, a: (() => { const r=rand(10,100), s=rand(100,1000); return (s/r).toFixed(3); })() },
+    { q: `A ${topic} hash table with ${rand(50,200)} slots and ${rand(20,100)} elements has what load factor?`, a: (() => { const s=rand(50,200), e=rand(20,100); return (e/s).toFixed(3); })() },
+  ];
+
+  const selectedMcq = pick(mcqPool, 5);
+  const selectedMsq = pick(msqPool, 5);
+  const selectedNat = pick(natPool, 5);
+
+  const questions = [];
+  for (const m of selectedMcq) {
+    const opts = shuffle(m.o);
+    questions.push({ text: m.q, type: 'MCQ', options: opts, correctAnswer: m.o[0], marks: 2, negativeMarks: 0.67, concept: topic });
+  }
+  for (const m of selectedMsq) {
+    const correctAnswers = m.c.map(i => m.o[i]);
+    const opts = shuffle(m.o);
+    questions.push({ text: m.q, type: 'MSQ', options: opts, correctAnswer: correctAnswers, marks: 2, negativeMarks: 0.67, concept: topic });
+  }
+  for (const m of selectedNat) {
+    questions.push({ text: m.q, type: 'NAT', options: [], correctAnswer: m.a, marks: 2, negativeMarks: 0, concept: topic });
+  }
+  return shuffle(questions);
+}

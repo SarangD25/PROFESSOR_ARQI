@@ -1,0 +1,284 @@
+app professorArqi {
+  wasp: {
+    version: "^0.22.0"
+  },
+  title: "Professor ARQI",
+  emailSender: {
+    provider: Dummy
+  },
+  client: {
+    rootComponent: import { RootComponent } from "@src/client/RootComponent.jsx"
+  },
+  auth: {
+    userEntity: User,
+    methods: {
+      email: {
+        fromField: {
+          name: "Professor ARQI",
+          email: "admin@professorqrai.com"
+        },
+        emailVerification: {
+          clientRoute: EmailVerification
+        },
+        passwordReset: {
+          clientRoute: PasswordReset
+        }
+      }
+    },
+    onAuthFailedRedirectTo: "/login"
+  }
+}
+
+// ─── ACTIONS ─────────────────────────────────────────────────────────────────
+
+action createOrganization {
+  fn: import { createOrganization } from "@src/server/actions/createOrganization.js",
+  entities: [Organization]
+}
+
+action addOrgStudents {
+  fn: import { addOrgStudents } from "@src/server/actions/addOrgStudents.js",
+  entities: [OrgStudent, Organization]
+}
+
+action createCampaign {
+  fn: import { createCampaign } from "@src/server/actions/createCampaign.js",
+  entities: [Campaign, Organization]
+}
+
+action generateSecureQR {
+  fn: import { generateSecureQR } from "@src/server/actions/generateSecureQR.js",
+  entities: [User, QRPaper, Campaign]
+}
+
+action createIndividualSession {
+  fn: import { createIndividualSession } from "@src/server/actions/createIndividualSession.js",
+  entities: [Campaign]
+}
+
+action generateBulkQR {
+  fn: import { generateBulkQR } from "@src/server/actions/generateBulkQR.js",
+  entities: [QRPaper, Campaign, OrgStudent, Organization, Assessment, Attempt, QuestionSet, OrgConfig]
+}
+
+action submitAttempt {
+  fn: import { submitAttempt } from "@src/server/actions/submitAttempt.js",
+  entities: [Attempt, QuestionSet, WeakArea, QRPaper]
+}
+
+action createAssessment {
+  fn: import { createAssessment } from "@src/server/actions/createAssessment.js",
+  entities: [Assessment, OrgStudent, Organization]
+}
+
+action deleteAssessment {
+  fn: import { deleteAssessment } from "@src/server/actions/deleteAssessment.js",
+  entities: [Assessment]
+}
+
+action updateOrgConfig {
+  fn: import { updateOrgConfig } from "@src/server/actions/updateOrgConfig.js",
+  entities: [OrgConfig, Organization]
+}
+
+action deletePaper {
+  fn: import { deletePaper } from "@src/server/actions/deletePaper.js",
+  entities: [QRPaper, QuestionSet, Attempt]
+}
+
+action deleteCampaign {
+  fn: import { deleteCampaign } from "@src/server/actions/deleteCampaign.js",
+  entities: [Campaign, QRPaper, QuestionSet, Attempt]
+}
+// ─── QUERIES ─────────────────────────────────────────────────────────────────
+
+query getMe {
+  fn: import { getMe } from "@src/server/queries/getMe.js",
+  entities: [User]
+}
+
+query getMyOrganization {
+  fn: import { getMyOrganization } from "@src/server/queries/getMyOrganization.js",
+  entities: [Organization, OrgStudent, Campaign]
+}
+
+query getOrgStudents {
+  fn: import { getOrgStudents } from "@src/server/queries/getOrgStudents.js",
+  entities: [OrgStudent, Organization]
+}
+
+query getMyCampaigns {
+  fn: import { getMyCampaigns } from "@src/server/queries/getMyCampaigns.js",
+  entities: [Campaign, QRPaper]
+}
+
+query getCampaigns {
+  fn: import { getCampaigns } from "@src/server/queries/getCampaigns.js",
+  entities: [Campaign]
+}
+
+query getPaper {
+  fn: import { getPaper } from "@src/server/queries/getPaper.js",
+  entities: [QRPaper, QuestionSet, Campaign, WeakArea, PyqChunk, GeneratedQuestionPool]
+}
+
+query getStudentWeakAreas {
+  fn: import { getStudentWeakAreas } from "@src/server/queries/getStudentWeakAreas.js",
+  entities: [WeakArea]
+}
+
+query getStudentPapers {
+  fn: import { getStudentPapers } from "@src/server/queries/getStudentPapers.js",
+  entities: [QRPaper, QuestionSet, Attempt, Campaign]
+}
+
+query getOrgStudentPapers {
+  fn: import { getOrgStudentPapers } from "@src/server/queries/getOrgStudentPapers.js",
+  entities: [QRPaper, QuestionSet, Attempt, Campaign, OrgStudent]
+}
+
+query getOrgAssessments {
+  fn: import { getOrgAssessments } from "@src/server/queries/getOrgAssessments.js",
+  entities: [Assessment, OrgStudent]
+}
+
+query getOrgAllPapers {
+  fn: import { getOrgAllPapers } from "@src/server/queries/getOrgAllPapers.js",
+  entities: [QRPaper, QuestionSet, Attempt, Campaign, Organization]
+}
+
+query getStudentReport {
+  fn: import { getStudentReport } from "@src/server/queries/getStudentReport.js",
+  entities: [Assessment, OrgStudent, QRPaper, QuestionSet, Attempt, Campaign, OrgConfig]
+}
+
+query getStudentSegregation {
+  fn: import { getStudentSegregation } from "@src/server/queries/getStudentSegregation.js",
+  entities: [Assessment, OrgStudent, QRPaper, QuestionSet, Attempt, Campaign, OrgConfig]
+}
+
+query getOrgConfig {
+  fn: import { getOrgConfig } from "@src/server/queries/getOrgConfig.js",
+  entities: [OrgConfig, Organization]
+}
+// ─── ROUTES ──────────────────────────────────────────────────────────────────
+
+route Root { path: "/", to: HomePage }
+route Login { path: "/login", to: LoginPage }
+route Register { path: "/register", to: RegisterPage }
+route EmailVerification { path: "/email-verification", to: EmailVerificationPage }
+route PasswordReset { path: "/password-reset", to: PasswordResetPage }
+route OrgPapers { path: "/org/papers", to: OrgPapersPage }
+page OrgPapersPage {
+  component: import { OrgPapers } from "@src/client/pages/org/Papers.jsx",
+  authRequired: true
+}
+
+// Individual mode
+route IndividualDashboard { path: "/individual", to: IndividualDashboardPage }
+route IndividualPapers { path: "/individual/papers", to: IndividualPapersPage }
+route IndividualAnalyticsRoute { path: "/individual/analytics", to: IndividualAnalyticsPage }
+page IndividualAnalyticsPage {
+  component: import { IndividualAnalytics } from "@src/client/pages/individual/Analytics.jsx",
+  authRequired: true
+}
+route IndividualNewSession { path: "/individual/new", to: IndividualNewSessionPage }
+
+// Org mode - teacher
+route OrgDashboard { path: "/org", to: OrgDashboardPage }
+route OrgStudents { path: "/org/students", to: OrgStudentsPage }
+route OrgCampaigns { path: "/org/campaigns", to: OrgCampaignsPage }
+route OrgNewCampaign { path: "/org/campaigns/new", to: OrgNewCampaignPage }
+route OrgBulkQR { path: "/org/bulk-qr", to: OrgBulkQRPage }
+route OrgStudentPapers { path: "/org/student/:studentId/papers", to: OrgStudentPapersPage }
+route OrgAssessments { path: "/org/assessments", to: OrgAssessmentsPage }
+route OrgAddAssessment { path: "/org/assessments/add", to: OrgAddAssessmentPage }
+route OrgStudentReport { path: "/org/student/:studentId/report", to: OrgStudentReportPage }
+route OrgSegregation { path: "/org/segregation", to: OrgSegregationPage }
+route OrgSettings { path: "/org/settings", to: OrgSettingsPage }
+
+// Paper view (no login required)
+route PaperView { path: "/paper/:token", to: PaperViewPage }
+
+// ─── PAGES ───────────────────────────────────────────────────────────────────
+
+page HomePage {
+  component: import { Home } from "@src/client/pages/Home.jsx"
+}
+page LoginPage {
+  component: import { Login } from "@src/client/pages/Login.jsx"
+}
+page RegisterPage {
+  component: import { Register } from "@src/client/pages/Register.jsx"
+}
+page EmailVerificationPage {
+  component: import { EmailVerification } from "@src/client/pages/EmailVerification.jsx"
+}
+page PasswordResetPage {
+  component: import { PasswordReset } from "@src/client/pages/PasswordReset.jsx"
+}
+
+// Individual mode pages
+page IndividualDashboardPage {
+  authRequired: true,
+  component: import { IndividualDashboard } from "@src/client/pages/individual/Dashboard.jsx"
+}
+page IndividualPapersPage {
+  authRequired: true,
+  component: import { IndividualPapers } from "@src/client/pages/individual/Papers.jsx"
+}
+page IndividualNewSessionPage {
+  authRequired: true,
+  component: import { IndividualNewSession } from "@src/client/pages/individual/NewSession.jsx"
+}
+
+// Org mode pages
+page OrgDashboardPage {
+  authRequired: true,
+  component: import { OrgDashboard } from "@src/client/pages/org/Dashboard.jsx"
+}
+page OrgStudentsPage {
+  authRequired: true,
+  component: import { OrgStudents } from "@src/client/pages/org/Students.jsx"
+}
+page OrgCampaignsPage {
+  authRequired: true,
+  component: import { OrgCampaigns } from "@src/client/pages/org/Campaigns.jsx"
+}
+page OrgNewCampaignPage {
+  authRequired: true,
+  component: import { OrgNewCampaign } from "@src/client/pages/org/NewCampaign.jsx"
+}
+page OrgBulkQRPage {
+  authRequired: true,
+  component: import { OrgBulkQR } from "@src/client/pages/org/BulkQR.jsx"
+}
+page OrgStudentPapersPage {
+  authRequired: true,
+  component: import { OrgStudentPapers } from "@src/client/pages/org/StudentPapers.jsx"
+}
+page OrgAssessmentsPage {
+  authRequired: true,
+  component: import { OrgAssessments } from "@src/client/pages/org/Assessments.jsx"
+}
+page OrgAddAssessmentPage {
+  authRequired: true,
+  component: import { OrgAddAssessment } from "@src/client/pages/org/AddAssessment.jsx"
+}
+page OrgStudentReportPage {
+  authRequired: true,
+  component: import { OrgStudentReport } from "@src/client/pages/org/StudentReport.jsx"
+}
+page OrgSegregationPage {
+  authRequired: true,
+  component: import { OrgSegregation } from "@src/client/pages/org/Segregation.jsx"
+}
+page OrgSettingsPage {
+  authRequired: true,
+  component: import { OrgSettings } from "@src/client/pages/org/Settings.jsx"
+}
+
+// Paper view - no auth required
+page PaperViewPage {
+  component: import { PaperView } from "@src/client/pages/PaperView.jsx"
+}
