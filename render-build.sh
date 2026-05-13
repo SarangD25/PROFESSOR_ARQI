@@ -1,11 +1,10 @@
 #!/bin/bash
 set -e
 
-echo "==> Installing Wasp CLI..."
-curl -sSL https://get.wasp.sh/installer.sh | sh
+echo "==> Installing Wasp CLI via npm..."
+npm install -g @wasp.sh/wasp-cli
 
 echo "==> Building Wasp project..."
-export PATH="$HOME/.local/bin:$PATH"
 wasp build
 
 echo "==> Installing server dependencies..."
