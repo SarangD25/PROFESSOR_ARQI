@@ -1413,4 +1413,446 @@ for (const [, val] of Object.entries(SUBJECT_KNOWLEDGE)) {
   }
 }
 
+// ═══════════════════════════════════════════════════════════════════════════
+// PYQ BANK — Verified Previous Year Questions for AI paraphrasing pipeline
+// ═══════════════════════════════════════════════════════════════════════════
+export const PYQ_BANK = {
+  'GATE CS': {
+    'DBMS': [
+      { text: 'Consider R(A,B,C,D,E) with FDs {A→BC, CD→E, B→D, E→A}. How many candidate keys does R have?', type: 'NAT', options: [], correctAnswer: '3', concept: 'Candidate Keys' },
+      { text: 'Consider the schedule: T1:R(X), T2:R(X), T2:W(X), T1:W(X). This schedule is:', type: 'MCQ', options: ['Conflict serializable','View serializable but not conflict serializable','Neither conflict nor view serializable','Both conflict and view serializable'], correctAnswer: 'View serializable but not conflict serializable', concept: 'Serializability' },
+      { text: 'Given R(A,B,C) with FDs {A→B, B→C}. R is in 2NF but not 3NF because:', type: 'MCQ', options: ['A→C is a partial dependency','B→C is a transitive dependency','A→B is a trivial FD','There is a multivalued dependency'], correctAnswer: 'B→C is a transitive dependency', concept: 'Normalization' },
+      { text: 'SELECT dept, COUNT(*) FROM emp WHERE salary>50000 GROUP BY dept HAVING COUNT(*)>3 ORDER BY dept. Which clause is executed last?', type: 'MCQ', options: ['WHERE','GROUP BY','HAVING','ORDER BY'], correctAnswer: 'ORDER BY', concept: 'SQL Execution Order' },
+      { text: 'A B+ tree of order 4 (max 3 keys per node) stores 1000 records. The minimum number of levels (including root and leaf) is:', type: 'NAT', options: [], correctAnswer: '5', concept: 'B+ Tree Indexing' },
+      { text: 'In 2PL, a transaction T acquires locks in this order: S(A), S(B), X(C), Unlock(A), X(D), Unlock(B). Is this valid 2PL?', type: 'MCQ', options: ['Yes, it follows strict 2PL','Yes, it follows basic 2PL','No, it acquires X(D) after Unlock(A)','No, it mixes shared and exclusive locks'], correctAnswer: 'No, it acquires X(D) after Unlock(A)', concept: 'Two-Phase Locking' },
+      { text: 'Consider R(A,B,C,D) decomposed into R1(A,B,C) and R2(A,D). Given FD A→D, this decomposition is:', type: 'MCQ', options: ['Lossless but not dependency preserving','Dependency preserving but not lossless','Both lossless and dependency preserving','Neither lossless nor dependency preserving'], correctAnswer: 'Both lossless and dependency preserving', concept: 'Decomposition' },
+      { text: 'A relation has 5 tuples. The maximum number of tuples in its Cartesian product with itself is:', type: 'NAT', options: [], correctAnswer: '25', concept: 'Relational Algebra' },
+      { text: 'In a concurrent system, which of the following is NOT a necessary condition for deadlock?', type: 'MCQ', options: ['Mutual exclusion','Hold and wait','Preemption','Circular wait'], correctAnswer: 'Preemption', concept: 'Deadlock in DBMS' },
+      { text: 'A hash table uses linear probing with h(k)=k mod 7. Keys 22, 29, 43, 36 are inserted in order. The position of key 36 is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Hashing and Indexing' },
+    ],
+    'Data Structures': [
+      { text: 'An AVL tree is constructed by inserting keys 3, 2, 1, 4, 5, 6, 7 one by one. The height of the resulting tree is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'AVL Trees' },
+      { text: 'Consider a max-heap with 7 elements: [90,80,70,50,60,65,30]. After deleting the root, the new heap is:', type: 'MCQ', options: ['[80,60,70,50,30,65]','[80,70,65,50,60,30]','[80,60,70,50,65,30]','[70,80,65,50,60,30]'], correctAnswer: '[80,60,70,50,30,65]', concept: 'Heaps' },
+      { text: 'A hash table of size 7 uses chaining. Keys 15, 22, 29, 36, 43 all hash to the same slot. The worst-case search time is:', type: 'MCQ', options: ['O(1)','O(5)','O(n)','O(log n)'], correctAnswer: 'O(n)', concept: 'Hashing' },
+      { text: 'In a complete binary tree with 31 nodes, the number of leaf nodes is:', type: 'NAT', options: [], correctAnswer: '16', concept: 'Binary Trees' },
+      { text: 'A graph has 6 vertices and the degree sequence {2,2,2,3,3,4}. The number of edges is:', type: 'NAT', options: [], correctAnswer: '8', concept: 'Graph Theory' },
+      { text: 'Postfix expression 6 3 2 * + 5 - evaluates to:', type: 'NAT', options: [], correctAnswer: '7', concept: 'Stack Applications' },
+      { text: 'In a BST, the inorder successor of a node with two children is always in its:', type: 'MCQ', options: ['Left subtree','Right subtree, leftmost node','Parent node','Right child'], correctAnswer: 'Right subtree, leftmost node', concept: 'BST Operations' },
+      { text: 'A circular queue of size 5 has front=2, rear=4. After 3 dequeues and 4 enqueues, the value of rear is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Queue' },
+      { text: 'The number of distinct BSTs that can be formed with 5 distinct keys is:', type: 'NAT', options: [], correctAnswer: '42', concept: 'Catalan Number' },
+      { text: 'An adjacency matrix of an undirected graph with n=5 vertices requires how many bits of storage?', type: 'NAT', options: [], correctAnswer: '25', concept: 'Graph Representation' },
+    ],
+    'Algorithms': [
+      { text: 'Consider QuickSort on array [3,1,4,1,5,9,2,6]. With first element as pivot and Lomuto partition, how many comparisons occur in the first partition?', type: 'NAT', options: [], correctAnswer: '7', concept: 'QuickSort Analysis' },
+      { text: 'The recurrence T(n) = 3T(n/4) + n log n. By Master theorem, T(n) is:', type: 'MCQ', options: ['Θ(n log n)','Θ(n^(log₄3))','Θ(n² log n)','Θ(n log² n)'], correctAnswer: 'Θ(n log n)', concept: 'Recurrences' },
+      { text: 'Dijkstra\'s algorithm is run on a graph with vertices {A,B,C,D} and edges A→B(1), A→C(4), B→C(2), B→D(6), C→D(3). The shortest path from A to D has weight:', type: 'NAT', options: [], correctAnswer: '6', concept: 'Shortest Path' },
+      { text: 'In Kruskal\'s MST algorithm on a graph with 6 vertices and 10 edges, the maximum number of edges examined before MST is complete is:', type: 'MCQ', options: ['5','6','10','It depends on edge weights'], correctAnswer: '10', concept: 'MST Algorithms' },
+      { text: 'The 0/1 Knapsack problem with n items and capacity W has time complexity using DP:', type: 'MCQ', options: ['O(n log n)','O(nW)','O(2^n)','O(n²)'], correctAnswer: 'O(nW)', concept: 'Dynamic Programming' },
+      { text: 'Merge sort on a linked list of n elements. The space complexity (excluding input) is:', type: 'MCQ', options: ['O(1)','O(log n)','O(n)','O(n log n)'], correctAnswer: 'O(log n)', concept: 'Sorting Complexity' },
+      { text: 'A graph has 8 vertices. BFS from vertex 1 visits vertices in order: 1,2,5,3,6,4,7,8. The minimum number of edges in this graph is:', type: 'NAT', options: [], correctAnswer: '7', concept: 'BFS Traversal' },
+      { text: 'Huffman coding for characters with frequencies {5,9,12,13,16,45}. The length of the Huffman code for frequency 5 is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Greedy Algorithms' },
+      { text: 'In the activity selection problem with intervals (1,4),(3,5),(0,6),(5,7),(3,9),(5,9),(6,10),(8,11),(8,12),(2,14),(12,16), the maximum activities selected is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Greedy Activity Selection' },
+      { text: 'The time complexity of finding the strongly connected components using Kosaraju\'s algorithm is:', type: 'MCQ', options: ['O(V²)','O(V+E)','O(V·E)','O(E log V)'], correctAnswer: 'O(V+E)', concept: 'Graph Algorithms' },
+    ],
+    'Operating Systems': [
+      { text: 'Consider 3 processes P1(burst=6), P2(burst=4), P3(burst=2) arriving at t=0. With SJF scheduling, the average waiting time is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'CPU Scheduling' },
+      { text: 'A system has 3 resource types: A(10), B(5), C(7). Five processes have max needs and current allocation. Using Banker\'s algorithm, if Available=[3,3,2], the system is in:', type: 'MCQ', options: ['Safe state','Unsafe state','Deadlock','Cannot determine without full allocation matrix'], correctAnswer: 'Cannot determine without full allocation matrix', concept: 'Deadlock Avoidance' },
+      { text: 'Page reference string: 7,0,1,2,0,3,0,4,2,3,0,3,2,1,2. With 3 frames using LRU, the number of page faults is:', type: 'NAT', options: [], correctAnswer: '12', concept: 'Page Replacement' },
+      { text: 'A process has 5 pages. Page table entries are: {0→3, 1→7, 2→5, 3→2, 4→9}. Page size=4KB. Logical address 8196 maps to physical address:', type: 'NAT', options: [], correctAnswer: '20484', concept: 'Paging Address Translation' },
+      { text: 'Two processes execute: P1: wait(S); wait(Q); signal(Q); signal(S) and P2: wait(Q); wait(S); signal(S); signal(Q). This can lead to:', type: 'MCQ', options: ['Starvation only','Deadlock','Neither deadlock nor starvation','Race condition only'], correctAnswer: 'Deadlock', concept: 'Deadlock Detection' },
+      { text: 'In Round Robin with time quantum=3, processes P1(burst=10), P2(burst=4), P3(burst=3) arrive at t=0. P2 finishes at time:', type: 'NAT', options: [], correctAnswer: '10', concept: 'Round Robin Scheduling' },
+      { text: 'A system uses 2-level page table. Virtual address=30 bits, page size=1KB. Each PTE=4 bytes. The total size of all inner page tables is:', type: 'MCQ', options: ['4KB','4MB','1MB','80KB'], correctAnswer: '4MB', concept: 'Multi-level Paging' },
+      { text: 'A disk has 200 tracks (0-199). Current head position=53. Request queue: 98,183,37,122,14,124,65,67. Using SSTF, the total head movement is:', type: 'NAT', options: [], correctAnswer: '236', concept: 'Disk Scheduling' },
+      { text: 'Peterson\'s solution for 2 processes uses which variables?', type: 'MCQ', options: ['One shared boolean','Two flags and one turn variable','One semaphore','Two mutexes'], correctAnswer: 'Two flags and one turn variable', concept: 'Process Synchronization' },
+      { text: 'A system with 4 resources and 3 processes has allocation [1,1,2] and max [2,2,3]. Total instances=4. The system is in:', type: 'MCQ', options: ['Safe state','Unsafe state','Deadlocked state','Cannot be determined'], correctAnswer: 'Unsafe state', concept: 'Banker\'s Algorithm' },
+    ],
+    'Computer Networks': [
+      { text: 'A host has IP 192.168.1.100/26. The broadcast address and number of usable hosts are:', type: 'MCQ', options: ['192.168.1.127 and 62','192.168.1.128 and 64','192.168.1.63 and 30','192.168.1.255 and 254'], correctAnswer: '192.168.1.127 and 62', concept: 'Subnetting' },
+      { text: 'In Stop-and-Wait ARQ, link bandwidth=1Mbps, RTT=20ms, frame size=1000 bits. The utilization is:', type: 'NAT', options: [], correctAnswer: '0.048', concept: 'Flow Control' },
+      { text: 'TCP uses 3-way handshake. If SYN is sent at t=0 and RTT=100ms, the connection is established at approximately:', type: 'NAT', options: [], correctAnswer: '150', concept: 'TCP Connection' },
+      { text: 'Given a network 10.0.0.0/8 divided into 16 equal subnets. The subnet mask is:', type: 'MCQ', options: ['255.240.0.0','255.248.0.0','255.128.0.0','255.255.0.0'], correctAnswer: '255.240.0.0', concept: 'Subnetting' },
+      { text: 'In Go-Back-N with window size W=4 and sequence numbers 0-7, sender sends frames 0,1,2,3. Frame 1 is lost. After timeout, sender retransmits:', type: 'MCQ', options: ['Only frame 1','Frames 1,2,3','Frames 1,2,3,4','All frames from 0'], correctAnswer: 'Frames 1,2,3', concept: 'Sliding Window' },
+      { text: 'A channel has bandwidth 3000 Hz and SNR=1023. Maximum data rate by Shannon theorem is:', type: 'NAT', options: [], correctAnswer: '30000', concept: 'Channel Capacity' },
+      { text: 'In CSMA/CD, the minimum frame size depends on:', type: 'MCQ', options: ['Bandwidth only','Propagation delay only','Both bandwidth and propagation delay (2×propagation×bandwidth)','MTU of the network'], correctAnswer: 'Both bandwidth and propagation delay (2×propagation×bandwidth)', concept: 'MAC Protocols' },
+      { text: 'A router has 4 interfaces. It receives a packet with TTL=1. The router:', type: 'MCQ', options: ['Forwards with TTL=0','Drops and sends ICMP Time Exceeded','Forwards with TTL=255','Drops silently'], correctAnswer: 'Drops and sends ICMP Time Exceeded', concept: 'IP Protocol' },
+      { text: 'In a sliding window protocol, if sender window size=6 and receiver window size=1, the minimum sequence number bits needed is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Sliding Window Protocol' },
+      { text: 'An Ethernet frame is 1518 bytes. With a preamble of 8 bytes and inter-frame gap of 12 bytes, the efficiency on a 100 Mbps link is approximately:', type: 'MCQ', options: ['98.7%','94.9%','95.7%','100%'], correctAnswer: '98.7%', concept: 'Ethernet Efficiency' },
+    ],
+    'Theory of Computation': [
+      { text: 'The minimum DFA for L = {w ∈ {a,b}* | w has an even number of a\'s and odd number of b\'s} has how many states?', type: 'NAT', options: [], correctAnswer: '4', concept: 'DFA Minimization' },
+      { text: 'Consider the grammar S→aS|bS|ε. The language generated is:', type: 'MCQ', options: ['{a,b}*','All strings starting with a','All strings ending with b','Only ε'], correctAnswer: '{a,b}*', concept: 'CFG Languages' },
+      { text: 'L = {0^n 1^n | n ≥ 1} is not regular. Using pumping lemma with string w = 0^p 1^p, if we pump the substring of 0\'s, the resulting string:', type: 'MCQ', options: ['Has unequal 0s and 1s, so not in L','Still has equal 0s and 1s','Becomes empty','Has more 1s than 0s'], correctAnswer: 'Has unequal 0s and 1s, so not in L', concept: 'Pumping Lemma' },
+      { text: 'An NFA has states {q0,q1,q2}, alphabet={0,1}, transitions: δ(q0,0)={q0,q1}, δ(q0,1)={q0}, δ(q1,1)={q2}. q2 is final. The language accepted is:', type: 'MCQ', options: ['Strings ending in 01','Strings containing 01','Strings starting with 01','All binary strings'], correctAnswer: 'Strings ending in 01', concept: 'NFA Construction' },
+      { text: 'The language L = {ww^R | w ∈ {a,b}*} (even-length palindromes) is:', type: 'MCQ', options: ['Regular','DCFL','CFL but not DCFL','CSL but not CFL'], correctAnswer: 'CFL but not DCFL', concept: 'Language Classification' },
+      { text: 'A PDA accepts L = {a^i b^j | i ≠ j}. The minimum number of states needed is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'PDA Design' },
+      { text: 'The intersection of a CFL and a regular language is always:', type: 'MCQ', options: ['Regular','CFL','CSL','Recursively enumerable'], correctAnswer: 'CFL', concept: 'Closure Properties' },
+      { text: 'Rice\'s theorem states that every non-trivial property of RE languages is:', type: 'MCQ', options: ['Decidable','Undecidable','Semi-decidable','NP-complete'], correctAnswer: 'Undecidable', concept: 'Decidability' },
+      { text: 'The number of strings of length 4 accepted by the DFA over {0,1} that accepts binary numbers divisible by 3 is:', type: 'NAT', options: [], correctAnswer: '6', concept: 'DFA Language Counting' },
+      { text: 'Consider two TMs: M1 accepts {0^n 1^n} and M2 accepts {0^n 1^n 0^n}. Which of the following is true?', type: 'MCQ', options: ['Both M1 and M2 are decidable','M1 is decidable but M2 is not','Both are undecidable','M1 is CFL, M2 is CSL, both decidable'], correctAnswer: 'M1 is CFL, M2 is CSL, both decidable', concept: 'Chomsky Hierarchy' },
+    ],
+    'Compiler Design': [
+      { text: 'Grammar: E→E+T|T, T→T*F|F, F→(E)|id. FIRST(E) is:', type: 'MCQ', options: ['{(, id}','{+, *, (, id}','{E, T, F}','{(, id, +}'], correctAnswer: '{(, id}', concept: 'FIRST Sets' },
+      { text: 'For the grammar S→AB, A→a|ε, B→b|ε. FOLLOW(A) is:', type: 'MCQ', options: ['{b, $}','{a, b}','{$}','{b}'], correctAnswer: '{b, $}', concept: 'FOLLOW Sets' },
+      { text: 'The string "id + id * id" is parsed by an SLR(1) parser. The number of reductions performed is:', type: 'NAT', options: [], correctAnswer: '5', concept: 'SLR Parsing' },
+      { text: 'Given grammar S→aABe, A→Abc|b, B→d. The string "abbcde" is parsed using shift-reduce. The handle after reading "abb" is:', type: 'MCQ', options: ['abb','bb','b (rightmost b)','ab'], correctAnswer: 'b (rightmost b)', concept: 'Bottom-up Parsing' },
+      { text: 'Three-address code for x = a[i] + b[j] requires how many instructions (including array access)?', type: 'NAT', options: [], correctAnswer: '4', concept: 'Intermediate Code' },
+      { text: 'An LL(1) grammar must be:', type: 'MCQ', options: ['Left recursive','Right recursive or non-recursive','Ambiguous','Left factored with no left recursion'], correctAnswer: 'Left factored with no left recursion', concept: 'LL Parsing Constraints' },
+      { text: 'In a DAG representation of expression a+a*(b-c)+(b-c)*d, the number of interior nodes is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'DAG Optimization' },
+      { text: 'A lexer uses the regex (a|b)*abb to recognize tokens. The minimum DFA states needed is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Lexical Analysis DFA' },
+      { text: 'Live variable analysis is a:', type: 'MCQ', options: ['Forward, may analysis','Forward, must analysis','Backward, may analysis','Backward, must analysis'], correctAnswer: 'Backward, may analysis', concept: 'Data Flow Analysis' },
+      { text: 'In an LR(0) item set, the item S→A.B indicates:', type: 'MCQ', options: ['A has been fully parsed','B is yet to be parsed','Both A and B are parsed','Neither is parsed'], correctAnswer: 'B is yet to be parsed', concept: 'LR Parsing' },
+    ],
+    'Digital Logic': [
+      { text: 'F(A,B,C,D) = Σm(0,1,2,5,8,9,10) with don\'t cares d(3,7). After K-map minimization, the number of prime implicants is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'K-Map Minimization' },
+      { text: 'A synchronous counter counts: 000→001→010→011→100→000. The number of flip-flops and the type of counter is:', type: 'MCQ', options: ['3 flip-flops, mod-5','3 flip-flops, mod-8','4 flip-flops, mod-5','2 flip-flops, mod-5'], correctAnswer: '3 flip-flops, mod-5', concept: 'Counter Design' },
+      { text: 'Implement F(A,B,C) = Σm(1,2,5,7) using an 8:1 MUX with A,B,C as select lines. The input to line 0 is:', type: 'NAT', options: [], correctAnswer: '0', concept: 'MUX Implementation' },
+      { text: 'A master-slave JK flip-flop has J=1, K=1. If current Q=0, after one clock pulse Q becomes:', type: 'NAT', options: [], correctAnswer: '1', concept: 'Flip-Flop Behavior' },
+      { text: 'The Boolean function F = AB\'C + A\'BC + ABC\' + ABC can be simplified to:', type: 'MCQ', options: ['AB + BC + AC','A + BC','AB + C','A(B+C) + BC'], correctAnswer: 'AB + BC + AC', concept: 'Boolean Simplification' },
+      { text: 'A 4-bit ripple carry adder adds 0110 and 1011. The sum and carry out are:', type: 'MCQ', options: ['10001 (sum=0001, Cout=1)','01001 (sum=1001, Cout=0)','10010 (sum=0010, Cout=1)','00001 (sum=0001, Cout=0)'], correctAnswer: '10001 (sum=0001, Cout=1)', concept: 'Adder Circuits' },
+      { text: 'A 3-to-8 decoder with enable is used to implement F(A,B,C) = Σm(1,3,5,7). The output is taken from:', type: 'MCQ', options: ['OR of outputs 1,3,5,7','AND of outputs 1,3,5,7','NAND of outputs 0,2,4,6','NOR of outputs 1,3,5,7'], correctAnswer: 'OR of outputs 1,3,5,7', concept: 'Decoder Applications' },
+      { text: 'A finite state machine has 12 states. The minimum number of state variables (flip-flops) needed is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'FSM Design' },
+      { text: 'In a mealy machine, the output changes:', type: 'MCQ', options: ['Only on clock edge','On input change between clock edges','Only on state change','Never asynchronously'], correctAnswer: 'On input change between clock edges', concept: 'Mealy vs Moore' },
+      { text: 'A ROM of size 256×8 can implement how many Boolean functions of 8 variables simultaneously?', type: 'NAT', options: [], correctAnswer: '8', concept: 'ROM as Function Generator' },
+    ],
+  },
+  'GATE ECE': {
+    'Network Theory': [
+      { text: 'In a series RLC circuit with R=5Ω, L=0.1H, C=1mF, the resonant frequency in rad/s is:', type: 'NAT', options: [], correctAnswer: '100', concept: 'Resonance' },
+      { text: 'Thevenin voltage across terminals A-B of a circuit with 12V source and 4Ω, 6Ω in series (A-B across 6Ω) is:', type: 'NAT', options: [], correctAnswer: '7.2', concept: 'Thevenin Theorem' },
+      { text: 'For a two-port network with Z11=10, Z12=3, Z21=3, Z22=5, the network is reciprocal because:', type: 'MCQ', options: ['Z11=Z22','Z12=Z21','Z11·Z22-Z12·Z21=41','All parameters are positive'], correctAnswer: 'Z12=Z21', concept: 'Two-Port Networks' },
+      { text: 'An RC circuit with R=1kΩ, C=1μF is charged to 10V. Voltage across C at t=1ms is approximately:', type: 'MCQ', options: ['3.68V','6.32V','0V','10V'], correctAnswer: '3.68V', concept: 'Transient Analysis' },
+      { text: 'In a graph with 5 nodes, 8 branches, and 2 separate parts, the independent mesh equations:', type: 'NAT', options: [], correctAnswer: '5', concept: 'Graph Theory' },
+      { text: 'Maximum power transferred to load when source has Zth=4+j3Ω is when ZL equals:', type: 'MCQ', options: ['4+j3','4-j3','5Ω','7Ω'], correctAnswer: '4-j3', concept: 'Max Power Transfer' },
+      { text: 'H(s)=10s/(s²+3s+2). The poles are at s=:', type: 'MCQ', options: ['-1 and -2','1 and 2','-1 and 2','0 and -3'], correctAnswer: '-1 and -2', concept: 'Pole-Zero Analysis' },
+      { text: 'The initial current through a 2H inductor with stored energy 8J is:', type: 'MCQ', options: ['2A','2.83A','4A','1A'], correctAnswer: '2.83A', concept: 'Inductor Energy' },
+      { text: 'Balanced Wheatstone bridge: R1=100Ω, R2=200Ω, R3=150Ω. R4 equals:', type: 'NAT', options: [], correctAnswer: '300', concept: 'Bridge Circuits' },
+      { text: 'A circuit has two current sources 5A and 3A in parallel with internal resistances 4Ω and 6Ω. Norton current is:', type: 'MCQ', options: ['8A','2A','3.8A','5A'], correctAnswer: '3.8A', concept: 'Norton Theorem' },
+    ],
+    'Signals and Systems': [
+      { text: 'A signal x(t) has bandwidth 4kHz sampled at 10kHz. The signal is perfectly reconstructed because fs=10kHz which is:', type: 'MCQ', options: ['Equal to 2fm','Greater than 2fm','Less than 2fm','Equal to fm'], correctAnswer: 'Greater than 2fm', concept: 'Nyquist Sampling' },
+      { text: 'H(z)=(z-1)/(z-0.5) with ROC |z|>0.5. For input x[n]=u[n], the value of y[1] is:', type: 'NAT', options: [], correctAnswer: '0.5', concept: 'Z-Transform Analysis' },
+      { text: 'System y[n]=x[n]+x[n-1]. The magnitude response |H(e^jω)| at ω=π is:', type: 'NAT', options: [], correctAnswer: '0', concept: 'Frequency Response' },
+      { text: 'h[n]=(0.5)^n u[n]. The system is stable because Σ|h[n]| converges to:', type: 'NAT', options: [], correctAnswer: '2', concept: 'BIBO Stability' },
+      { text: 'x(t)=cos(100πt)+cos(200πt). Minimum sampling rate to avoid aliasing is:', type: 'NAT', options: [], correctAnswer: '200', concept: 'Sampling Rate' },
+      { text: 'The autocorrelation Rxx(0) of x(t)=3cos(10t)+4sin(10t) is:', type: 'NAT', options: [], correctAnswer: '12.5', concept: 'Autocorrelation' },
+      { text: 'y(t)=x(2t) is time-variant because:', type: 'MCQ', options: ['It compresses the signal','Shifting input by t0 gives x(2t-2t0) not x(2(t-t0))','It doubles frequency','It is non-causal'], correctAnswer: 'Shifting input by t0 gives x(2t-2t0) not x(2(t-t0))', concept: 'Time Invariance' },
+      { text: 'The Laplace transform of t·u(t) is:', type: 'MCQ', options: ['1/s','1/s²','2/s³','s'], correctAnswer: '1/s²', concept: 'Laplace Transform' },
+      { text: 'DFT of x[n]={1,1,1,1} (N=4). X[0] equals:', type: 'NAT', options: [], correctAnswer: '4', concept: 'DFT' },
+      { text: 'A system with h(t)=e^(2t)u(t) is unstable because:', type: 'MCQ', options: ['h(t) is non-causal','∫|h(t)|dt diverges','h(t) has a pole in RHP','Both ∫|h(t)|dt diverges and pole in RHP'], correctAnswer: 'Both ∫|h(t)|dt diverges and pole in RHP', concept: 'Stability Analysis' },
+    ],
+    'Digital Circuits': [
+      { text: 'A 4-bit synchronous up-counter starts at 1010. After 7 clock pulses, the output is:', type: 'MCQ', options: ['0001','0010','0000','0011'], correctAnswer: '0001', concept: 'Counters' },
+      { text: 'A 16K×8 memory chip requires total address+data lines:', type: 'NAT', options: [], correctAnswer: '22', concept: 'Memory Organization' },
+      { text: 'F=Σm(0,2,5,7) using 4:1 MUX with A,B as select. Input I0 in terms of C is:', type: 'MCQ', options: ['C\'','C','1','0'], correctAnswer: 'C\'', concept: 'MUX Design' },
+      { text: 'An 8-bit successive approximation ADC with 1MHz clock completes one conversion in μs:', type: 'NAT', options: [], correctAnswer: '8', concept: 'ADC Timing' },
+      { text: 'Propagation delay of a 32-bit ripple carry adder (each FA delay=10ns) is:', type: 'NAT', options: [], correctAnswer: '320', concept: 'Adder Delay Analysis' },
+      { text: 'Moore FSM for detecting "101" in serial bit stream needs minimum states:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Sequence Detector' },
+      { text: 'Two 4K×4 RAM chips combined create memory of size:', type: 'MCQ', options: ['4K×8','8K×4','8K×8','4K×16'], correctAnswer: '4K×8', concept: 'Memory Expansion' },
+      { text: 'A 3-bit flash ADC requires comparators:', type: 'NAT', options: [], correctAnswer: '7', concept: 'Flash ADC' },
+      { text: 'A hazard in combinational circuits is eliminated by:', type: 'MCQ', options: ['Adding redundant prime implicants','Removing essential PI','Using more gates','Reducing variables'], correctAnswer: 'Adding redundant prime implicants', concept: 'Hazard Elimination' },
+      { text: 'A shift register loaded with 1011 after 2 right shifts (serial input=0) contains:', type: 'MCQ', options: ['0010','0011','1101','0101'], correctAnswer: '0010', concept: 'Shift Registers' },
+    ],
+    'Communications': [
+      { text: 'AM signal: carrier power=10W, modulation index=0.5. Total sideband power in watts is:', type: 'NAT', options: [], correctAnswer: '1.25', concept: 'AM Power' },
+      { text: 'FM signal: m(t) bandwidth=10kHz, kf=50kHz/V, max|m(t)|=2V. Carson bandwidth in Hz is:', type: 'NAT', options: [], correctAnswer: '220000', concept: 'FM Bandwidth' },
+      { text: 'In 16-QAM, bits per symbol is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Digital Modulation' },
+      { text: 'PCM: 8kHz sampling, 8 bits/sample. The bit rate in bps is:', type: 'NAT', options: [], correctAnswer: '64000', concept: 'PCM Bit Rate' },
+      { text: 'Superheterodyne receiver with IF=455kHz tuned to 1MHz. Image frequency in Hz is:', type: 'NAT', options: [], correctAnswer: '1910000', concept: 'Image Frequency' },
+      { text: 'Channel bandwidth=4kHz, SNR=31. Shannon capacity in kbps is:', type: 'NAT', options: [], correctAnswer: '20', concept: 'Channel Capacity' },
+      { text: 'QPSK spectral efficiency compared to BPSK is:', type: 'MCQ', options: ['Same','Twice','Half','Four times'], correctAnswer: 'Twice', concept: 'Spectral Efficiency' },
+      { text: 'A (7,4) Hamming code can correct up to how many errors per codeword?', type: 'NAT', options: [], correctAnswer: '1', concept: 'Error Correction' },
+      { text: 'Delta modulation slope overload occurs when the input signal changes:', type: 'MCQ', options: ['Too slowly','Too rapidly','At constant rate','Not at all'], correctAnswer: 'Too rapidly', concept: 'Delta Modulation' },
+      { text: 'Entropy of a source with probabilities {0.5, 0.25, 0.125, 0.125} in bits is:', type: 'NAT', options: [], correctAnswer: '1.75', concept: 'Information Theory' },
+    ],
+    'Control Systems': [
+      { text: 'G(s)=K/s(s+2)(s+4). By Routh criterion, the range of K for stability is:', type: 'MCQ', options: ['0<K<48','0<K<24','K>48','K>0'], correctAnswer: '0<K<48', concept: 'Routh-Hurwitz' },
+      { text: 'Second-order system: ωn=10 rad/s, ζ=0.5. Peak time tp is approximately:', type: 'MCQ', options: ['0.363s','0.628s','0.1s','1.0s'], correctAnswer: '0.363s', concept: 'Time Response' },
+      { text: 'G(s)H(s)=K(s+1)/s²(s+5). The system type is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'System Type' },
+      { text: 'Unity feedback, G(s)=10/s(s+1). Steady-state error for ramp input is:', type: 'NAT', options: [], correctAnswer: '0.1', concept: 'Steady-State Error' },
+      { text: 'Root locus of G(s)H(s)=K/s(s+3)(s+5): asymptote angles are:', type: 'MCQ', options: ['60°,180°,300°','90°,270°','0°,120°,240°','45°,135°,225°'], correctAnswer: '60°,180°,300°', concept: 'Root Locus' },
+      { text: 'Lag compensator has pole closer to origin than zero. This improves:', type: 'MCQ', options: ['Transient response','Steady-state accuracy','Bandwidth','Rise time'], correctAnswer: 'Steady-state accuracy', concept: 'Compensator Design' },
+      { text: 'Number of asymptotes in root locus of G(s)=K/(s(s+1)(s+3)) is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Root Locus Properties' },
+      { text: 'State matrix A=[[0,1],[-2,-3]]. The eigenvalues are:', type: 'MCQ', options: ['-1 and -2','1 and 2','-1 and 2','0 and -3'], correctAnswer: '-1 and -2', concept: 'State Space' },
+      { text: 'G(s)=100/(s+10). The DC gain in dB is:', type: 'NAT', options: [], correctAnswer: '20', concept: 'Bode Plot' },
+      { text: 'G(jω)=1/(jω(jω+1)). Phase at ω=1 rad/s is:', type: 'MCQ', options: ['-90°','-135°','-180°','-45°'], correctAnswer: '-135°', concept: 'Phase Analysis' },
+    ],
+  },
+  'JEE Main': {
+    'Physics - Mechanics': [
+      { text: 'A block slides down a 30° incline with μ=0.3. If g=10m/s², the acceleration in m/s² is:', type: 'NAT', options: [], correctAnswer: '2.4', concept: 'Inclined Plane' },
+      { text: 'Two masses 3kg and 5kg connected by a string over a frictionless pulley (Atwood machine). The acceleration is (g=10m/s²):', type: 'NAT', options: [], correctAnswer: '2.5', concept: 'Newton Laws' },
+      { text: 'A projectile is fired at 60° with velocity 40m/s. Maximum height reached is (g=10m/s²):', type: 'NAT', options: [], correctAnswer: '60', concept: 'Projectile Motion' },
+      { text: 'A disc of mass 2kg and radius 0.5m rolls without slipping. Its total KE at v=4m/s is:', type: 'NAT', options: [], correctAnswer: '24', concept: 'Rolling Motion' },
+      { text: 'A satellite orbits Earth at height h=R (R=radius of Earth). Its orbital velocity relative to surface velocity is:', type: 'MCQ', options: ['v₀/√2','v₀×√2','v₀/2','2v₀'], correctAnswer: 'v₀/√2', concept: 'Orbital Mechanics' },
+      { text: 'Spring constant k=500N/m, mass=2kg in SHM. The time period in seconds is:', type: 'MCQ', options: ['0.4π','0.2π','2π','π'], correctAnswer: '0.4π', concept: 'SHM' },
+      { text: 'A 2kg ball moving at 5m/s collides elastically with a stationary 3kg ball. Speed of 2kg ball after collision is:', type: 'NAT', options: [], correctAnswer: '1', concept: 'Elastic Collision' },
+      { text: 'Work done by gravity on a 5kg mass sliding 10m down a 37° incline is (g=10m/s²):', type: 'NAT', options: [], correctAnswer: '300', concept: 'Work Energy' },
+      { text: 'A torque of 20Nm is applied to a wheel of moment of inertia 4kg·m². Angular acceleration in rad/s² is:', type: 'NAT', options: [], correctAnswer: '5', concept: 'Rotational Dynamics' },
+      { text: 'A body starts from rest with acceleration 2m/s². Distance covered in the 5th second is:', type: 'NAT', options: [], correctAnswer: '9', concept: 'Kinematics' },
+    ],
+    'Physics - Electromagnetism': [
+      { text: 'Three capacitors 2μF, 3μF, 6μF in parallel. Equivalent capacitance in μF is:', type: 'NAT', options: [], correctAnswer: '11', concept: 'Capacitance' },
+      { text: 'A wire of resistance 12Ω is bent into a circle. Resistance between diametrically opposite points is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Resistance Networks' },
+      { text: 'A circular coil of 100 turns, area 0.01m² in B=0.1T rotates at 50 rev/s. Peak EMF in volts is:', type: 'MCQ', options: ['10π','100π','π','50π'], correctAnswer: '10π', concept: 'Electromagnetic Induction' },
+      { text: 'A proton enters uniform B=0.5T perpendicular to its velocity v=10⁶m/s. Radius of circular path (mp=1.67×10⁻²⁷kg) is:', type: 'MCQ', options: ['0.021m','0.21m','2.1m','0.0021m'], correctAnswer: '0.021m', concept: 'Charged Particle Motion' },
+      { text: 'In an LCR series circuit, L=0.1H, C=100μF, R=10Ω. The quality factor is:', type: 'MCQ', options: ['3.16','10','1','31.6'], correctAnswer: '3.16', concept: 'AC Circuits' },
+      { text: 'A parallel plate capacitor with plate area 0.01m², separation 1mm, εr=5. Capacitance in pF is:', type: 'NAT', options: [], correctAnswer: '443', concept: 'Capacitors' },
+      { text: 'Current I=2A in a solenoid of 500 turns, length 0.5m. Magnetic field inside in mT is:', type: 'NAT', options: [], correctAnswer: '2.51', concept: 'Solenoid' },
+      { text: 'A galvanometer of resistance 50Ω gives full deflection at 1mA. Shunt needed for 1A ammeter is:', type: 'MCQ', options: ['0.05Ω','0.5Ω','5Ω','50Ω'], correctAnswer: '0.05Ω', concept: 'Galvanometer Conversion' },
+      { text: 'Electric field at distance 10cm from a line charge of λ=2×10⁻⁶ C/m is (in kV/m):', type: 'NAT', options: [], correctAnswer: '360', concept: 'Electric Field' },
+      { text: 'A transformer steps down 220V to 22V. If primary has 1000 turns, secondary turns:', type: 'NAT', options: [], correctAnswer: '100', concept: 'Transformers' },
+    ],
+    'Chemistry - Organic': [
+      { text: 'CH₃CH=CH₂ + HBr → product by Markovnikov rule is:', type: 'MCQ', options: ['1-Bromopropane','2-Bromopropane','1,2-Dibromopropane','Propane'], correctAnswer: '2-Bromopropane', concept: 'Addition Reactions' },
+      { text: 'The number of sp² hybridized carbons in CH₂=CH-CH=CH₂ is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Hybridization' },
+      { text: 'SN2 rate is fastest for which substrate?', type: 'MCQ', options: ['CH₃Br','(CH₃)₂CHBr','(CH₃)₃CBr','C₆H₅CHBrCH₃'], correctAnswer: 'CH₃Br', concept: 'Nucleophilic Substitution' },
+      { text: 'The number of structural isomers of C₅H₁₂ is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Structural Isomerism' },
+      { text: 'Ozonolysis of 2-butene produces:', type: 'MCQ', options: ['2 moles of acetaldehyde','1 mole formaldehyde + 1 mole acetaldehyde','2 moles of formaldehyde','1 mole acetone + 1 mole formaldehyde'], correctAnswer: '2 moles of acetaldehyde', concept: 'Ozonolysis' },
+      { text: 'In the Cannizzaro reaction, benzaldehyde gives:', type: 'MCQ', options: ['Benzyl alcohol + benzoic acid','Benzene + CO₂','Benzophenone','Cinnamaldehyde'], correctAnswer: 'Benzyl alcohol + benzoic acid', concept: 'Aldehyde Reactions' },
+      { text: 'The degree of unsaturation in C₆H₅NO₂ is:', type: 'NAT', options: [], correctAnswer: '5', concept: 'Degree of Unsaturation' },
+      { text: 'Lucas test gives turbidity fastest with:', type: 'MCQ', options: ['Primary alcohol','Secondary alcohol','Tertiary alcohol','Methanol'], correctAnswer: 'Tertiary alcohol', concept: 'Alcohol Tests' },
+      { text: 'How many monosubstitution products does neopentane give on chlorination?', type: 'NAT', options: [], correctAnswer: '1', concept: 'Halogenation' },
+      { text: 'The product of aldol condensation of acetaldehyde is:', type: 'MCQ', options: ['3-Hydroxybutanal','Butanal','Crotonaldehyde','Acetic acid'], correctAnswer: '3-Hydroxybutanal', concept: 'Aldol Condensation' },
+    ],
+    'Chemistry - Inorganic': [
+      { text: 'The oxidation state of Mn in KMnO₄ is:', type: 'NAT', options: [], correctAnswer: '7', concept: 'Oxidation States' },
+      { text: 'An FCC unit cell contains effectively how many atoms?', type: 'NAT', options: [], correctAnswer: '4', concept: 'Solid State' },
+      { text: 'PCl₅ has shape trigonal bipyramidal. The number of 90° Cl-P-Cl bond angles is:', type: 'NAT', options: [], correctAnswer: '6', concept: 'VSEPR Theory' },
+      { text: 'The magnetic moment of Ti³⁺ (Z=22) in BM is approximately:', type: 'MCQ', options: ['1.73','2.83','3.87','0'], correctAnswer: '1.73', concept: 'd-Block Elements' },
+      { text: '[Co(NH₃)₆]³⁺ is diamagnetic. Co³⁺ (d⁶) must be in which field?', type: 'MCQ', options: ['Weak field','Strong field','No field','Medium field'], correctAnswer: 'Strong field', concept: 'Crystal Field Theory' },
+      { text: 'The number of lone pairs on Xe in XeF₄ is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'Noble Gas Compounds' },
+      { text: 'In the thermite reaction, Al reduces Fe₂O₃. Al acts as:', type: 'MCQ', options: ['Oxidizing agent','Reducing agent','Catalyst','Flux'], correctAnswer: 'Reducing agent', concept: 'Metallurgy' },
+      { text: 'The packing efficiency of BCC structure is approximately:', type: 'MCQ', options: ['52%','68%','74%','90%'], correctAnswer: '68%', concept: 'Solid State Packing' },
+      { text: 'Among Na, Mg, Al, Si — which has the highest ionization energy?', type: 'MCQ', options: ['Na','Mg','Al','Si'], correctAnswer: 'Si', concept: 'Periodic Trends' },
+      { text: 'The bond order of NO is:', type: 'NAT', options: [], correctAnswer: '2.5', concept: 'MOT' },
+    ],
+    'Mathematics - Calculus': [
+      { text: 'If f(x)=x³-3x²+2, the local minimum occurs at x=:', type: 'NAT', options: [], correctAnswer: '2', concept: 'Maxima Minima' },
+      { text: '∫₀¹ x·eˣ dx equals:', type: 'MCQ', options: ['1','e-1','2e-1','e'], correctAnswer: '1', concept: 'Integration by Parts' },
+      { text: 'lim(x→0) (eˣ-1-x)/x² equals:', type: 'MCQ', options: ['0','1/2','1','∞'], correctAnswer: '1/2', concept: 'L\'Hopital Rule' },
+      { text: 'The area enclosed between y=x² and y=2x is:', type: 'NAT', options: [], correctAnswer: '1.33', concept: 'Area Between Curves' },
+      { text: 'dy/dx + 2y = e⁻ˣ. The integrating factor is:', type: 'MCQ', options: ['e²ˣ','e⁻²ˣ','eˣ','2x'], correctAnswer: 'e²ˣ', concept: 'Linear Differential Equations' },
+      { text: 'The radius of curvature of y=x² at origin is:', type: 'NAT', options: [], correctAnswer: '0.5', concept: 'Curvature' },
+      { text: 'd/dx[tan⁻¹(sinx/(1+cosx))] equals:', type: 'MCQ', options: ['1/2','1','cosx','1/(1+cosx)'], correctAnswer: '1/2', concept: 'Differentiation' },
+      { text: '∫ dx/(x²+4x+8) requires completing the square. The answer involves:', type: 'MCQ', options: ['tan⁻¹','sin⁻¹','log','sec⁻¹'], correctAnswer: 'tan⁻¹', concept: 'Integration Techniques' },
+      { text: 'The solution of dy/dx = y/x with y(1)=2 at x=3 gives y=:', type: 'NAT', options: [], correctAnswer: '6', concept: 'Separable ODE' },
+      { text: 'The volume of solid of revolution of y=√x from x=0 to x=4 about x-axis is:', type: 'MCQ', options: ['8π','4π','16π','2π'], correctAnswer: '8π', concept: 'Solid of Revolution' },
+    ],
+    'Mathematics - Algebra': [
+      { text: 'If roots of 2x²-5x+k=0 are in ratio 2:3, then k equals:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Quadratic Equations' },
+      { text: 'det([[1,2,3],[4,5,6],[7,8,9]]) equals:', type: 'NAT', options: [], correctAnswer: '0', concept: 'Determinants' },
+      { text: 'Sum of GP: 3+6+12+...+768. Number of terms is:', type: 'NAT', options: [], correctAnswer: '9', concept: 'Geometric Series' },
+      { text: 'If A is 3×3 matrix with det(A)=5, then det(adj(A)) is:', type: 'NAT', options: [], correctAnswer: '25', concept: 'Adjoint Matrix' },
+      { text: 'The number of 4-letter words from MATHEMATICS with no repetition is:', type: 'MCQ', options: ['5040','2520','1680','840'], correctAnswer: '2520', concept: 'Permutations' },
+      { text: 'In how many ways can 8 people sit around a circular table?', type: 'NAT', options: [], correctAnswer: '5040', concept: 'Circular Permutations' },
+      { text: 'If |z|=2 and arg(z)=π/3, then z in rectangular form is:', type: 'MCQ', options: ['1+i√3','2+i√3','1+i2','√3+i'], correctAnswer: '1+i√3', concept: 'Complex Numbers' },
+      { text: 'The coefficient of x³ in (1+x)¹⁰ is:', type: 'NAT', options: [], correctAnswer: '120', concept: 'Binomial Theorem' },
+      { text: 'If A={1,2,3,4}, the number of subsets containing element 1 is:', type: 'NAT', options: [], correctAnswer: '8', concept: 'Set Theory' },
+      { text: 'Sum to infinity: 1-1/3+1/9-1/27+... equals:', type: 'MCQ', options: ['3/4','2/3','1/2','4/3'], correctAnswer: '3/4', concept: 'Infinite GP' },
+    ],
+  },
+  'NEET': {
+    'Biology - Botany': [
+      { text: 'In C3 plants, the first stable product of CO₂ fixation is 3-PGA (3-carbon). In C4 plants, it is OAA which has how many carbons?', type: 'NAT', options: [], correctAnswer: '4', concept: 'Photosynthesis Pathways' },
+      { text: 'During meiosis I, crossing over occurs at pachytene. If a cell has 2n=46, the number of tetrads formed is:', type: 'NAT', options: [], correctAnswer: '23', concept: 'Cell Division' },
+      { text: 'A plant shows genotype RrYy. By Mendel\'s law of independent assortment, the number of distinct gamete types is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Genetics' },
+      { text: 'In aerobic respiration, 1 NADH entering ETC produces approximately how many ATP via oxidative phosphorylation?', type: 'MCQ', options: ['1.5','2','2.5','3'], correctAnswer: '2.5', concept: 'Respiration Efficiency' },
+      { text: 'A pea plant heterozygous for height (Tt) is crossed with a dwarf plant (tt). The expected ratio of tall to dwarf offspring is:', type: 'MCQ', options: ['3:1','1:1','1:3','All tall'], correctAnswer: '1:1', concept: 'Mendelian Genetics' },
+      { text: 'Photorespiration in C3 plants is catalyzed by RuBisCO acting on:', type: 'MCQ', options: ['CO₂ only','O₂ only','Both CO₂ and O₂','Neither'], correctAnswer: 'Both CO₂ and O₂', concept: 'Photorespiration' },
+      { text: 'If a plant cell is placed in a hypertonic solution, it undergoes:', type: 'MCQ', options: ['Turgidity','Plasmolysis','Lysis','No change'], correctAnswer: 'Plasmolysis', concept: 'Osmosis' },
+      { text: 'The ratio of phenotypes in a dihybrid cross F2 generation is:', type: 'MCQ', options: ['3:1','9:3:3:1','1:2:1','1:1:1:1'], correctAnswer: '9:3:3:1', concept: 'Dihybrid Cross' },
+      { text: 'How many NADPH molecules are required to fix one molecule of CO₂ in the Calvin cycle?', type: 'NAT', options: [], correctAnswer: '2', concept: 'Calvin Cycle' },
+      { text: 'Auxin moves basipetally in stems. This is an example of:', type: 'MCQ', options: ['Osmosis','Polar transport','Active transport','Facilitated diffusion'], correctAnswer: 'Polar transport', concept: 'Plant Hormones' },
+    ],
+    'Biology - Zoology': [
+      { text: 'GFR in a healthy human kidney is approximately (in mL/min):', type: 'NAT', options: [], correctAnswer: '125', concept: 'Renal Physiology' },
+      { text: 'A person with blood group AB can receive blood from:', type: 'MCQ', options: ['O only','A and B only','AB only','All blood groups (universal recipient)'], correctAnswer: 'All blood groups (universal recipient)', concept: 'Blood Groups' },
+      { text: 'If both parents are carriers (Aa) for sickle cell anemia, probability of an affected child is:', type: 'MCQ', options: ['1/4','1/2','3/4','1'], correctAnswer: '1/4', concept: 'Human Genetics' },
+      { text: 'The cardiac output = stroke volume × heart rate. If SV=70mL and HR=72/min, CO in L/min is:', type: 'NAT', options: [], correctAnswer: '5.04', concept: 'Cardiac Physiology' },
+      { text: 'A codon has 3 bases. With 4 types of nucleotides, the total possible codons are:', type: 'NAT', options: [], correctAnswer: '64', concept: 'Molecular Biology' },
+      { text: 'Oxyhaemoglobin dissociation curve shifts right (Bohr effect) in:', type: 'MCQ', options: ['Low CO₂ and high pH','High CO₂ and low pH','Low temperature','High O₂ concentration'], correctAnswer: 'High CO₂ and low pH', concept: 'Respiratory Physiology' },
+      { text: 'In the human karyotype, total autosomes in a somatic cell are:', type: 'NAT', options: [], correctAnswer: '44', concept: 'Chromosomes' },
+      { text: 'The neurotransmitter at neuromuscular junction is:', type: 'MCQ', options: ['Dopamine','Serotonin','Acetylcholine','GABA'], correctAnswer: 'Acetylcholine', concept: 'Neural Signaling' },
+      { text: 'Antibodies are produced by:', type: 'MCQ', options: ['T-helper cells','B-lymphocytes (plasma cells)','Macrophages','NK cells'], correctAnswer: 'B-lymphocytes (plasma cells)', concept: 'Immunology' },
+      { text: 'During DNA replication, Okazaki fragments are formed on which strand?', type: 'MCQ', options: ['Leading strand','Lagging strand','Both strands','Neither strand'], correctAnswer: 'Lagging strand', concept: 'DNA Replication' },
+    ],
+    'Physics': [
+      { text: 'A concave mirror has focal length 15cm. An object at 30cm forms image at:', type: 'NAT', options: [], correctAnswer: '30', concept: 'Ray Optics' },
+      { text: 'Two resistors 4Ω and 12Ω in parallel. A 6V battery is connected. Total current drawn is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'Circuits' },
+      { text: 'A convex lens of focal length 10cm. Object at 15cm. Image distance is:', type: 'NAT', options: [], correctAnswer: '30', concept: 'Lens Formula' },
+      { text: 'Photon of frequency 5×10¹⁴ Hz. Its energy in eV is (h=6.6×10⁻³⁴, 1eV=1.6×10⁻¹⁹):', type: 'MCQ', options: ['2.06','3.3','1.03','4.12'], correctAnswer: '2.06', concept: 'Photoelectric Effect' },
+      { text: 'A body of mass 2kg moving at 3m/s collides with a wall and bounces back at 2m/s. Change in momentum (in kg·m/s) is:', type: 'NAT', options: [], correctAnswer: '10', concept: 'Impulse Momentum' },
+      { text: 'In Young\'s experiment, λ=600nm, d=0.1mm, D=1m. Fringe width in mm is:', type: 'NAT', options: [], correctAnswer: '6', concept: 'Wave Optics' },
+      { text: 'A radioactive element has half-life 20 min. After 1 hour, the fraction remaining is:', type: 'MCQ', options: ['1/2','1/4','1/8','1/16'], correctAnswer: '1/8', concept: 'Nuclear Physics' },
+      { text: 'EMF of 2 cells (1.5V, 0.5Ω each) in series with external resistance 4Ω. Current is:', type: 'MCQ', options: ['0.5A','0.6A','0.75A','1A'], correctAnswer: '0.6A', concept: 'EMF and Internal Resistance' },
+      { text: 'A wire of length L and resistance R is stretched to 2L. New resistance is:', type: 'MCQ', options: ['R','2R','4R','R/2'], correctAnswer: '4R', concept: 'Resistance' },
+      { text: 'A myopic eye has far point 2m. The corrective lens power in diopters is:', type: 'NAT', options: [], correctAnswer: '-0.5', concept: 'Defects of Vision' },
+    ],
+    'Chemistry': [
+      { text: 'The pH of 0.01M HCl solution is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'pH Calculation' },
+      { text: 'How many moles of NaOH are needed to neutralize 0.5 moles of H₂SO₄?', type: 'NAT', options: [], correctAnswer: '1', concept: 'Stoichiometry' },
+      { text: 'At STP, 22.4L of any ideal gas contains molecules equal to:', type: 'MCQ', options: ['6.022×10²²','6.022×10²³','3.011×10²³','12.044×10²³'], correctAnswer: '6.022×10²³', concept: 'Mole Concept' },
+      { text: 'The freezing point of 0.1m NaCl (i=2) is depressed by (Kf=1.86): ΔTf =', type: 'MCQ', options: ['0.186°C','0.372°C','1.86°C','3.72°C'], correctAnswer: '0.372°C', concept: 'Colligative Properties' },
+      { text: 'For a first-order reaction with k=0.693 min⁻¹, the half-life in minutes is:', type: 'NAT', options: [], correctAnswer: '1', concept: 'Chemical Kinetics' },
+      { text: 'In the electrochemical series, which metal is the strongest reducing agent?', type: 'MCQ', options: ['Zinc','Iron','Lithium','Sodium'], correctAnswer: 'Lithium', concept: 'Electrochemistry' },
+      { text: 'ΔG = ΔH - TΔS. A reaction is spontaneous at all temperatures when:', type: 'MCQ', options: ['ΔH>0, ΔS>0','ΔH<0, ΔS>0','ΔH<0, ΔS<0','ΔH>0, ΔS<0'], correctAnswer: 'ΔH<0, ΔS>0', concept: 'Thermodynamics' },
+      { text: 'The number of sigma and pi bonds in ethyne (C₂H₂) are respectively:', type: 'MCQ', options: ['3σ, 2π','2σ, 3π','5σ, 0π','2σ, 2π'], correctAnswer: '3σ, 2π', concept: 'Chemical Bonding' },
+      { text: 'Equilibrium constant Kp for N₂+3H₂⇌2NH₃ is related to Kc by Kp=Kc(RT)^Δn. Here Δn is:', type: 'NAT', options: [], correctAnswer: '-2', concept: 'Chemical Equilibrium' },
+      { text: 'The molarity of a solution with 40g NaOH in 500mL is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'Solution Chemistry' },
+    ],
+  },
+  'JEE Advanced': {
+    'Physics': [
+      { text: 'A uniform rod of mass M, length L pivoted at one end oscillates as a physical pendulum. Its time period is T=2π√(2L/3g). If L=1.5m, T is approximately:', type: 'MCQ', options: ['2.0s','1.4s','1.0s','2.8s'], correctAnswer: '2.0s', concept: 'Physical Pendulum' },
+      { text: 'In YDSE, slit separation d=0.5mm, screen distance D=1m, λ=500nm. If one slit is covered with a thin film (μ=1.5, t=1μm), the central fringe shifts by how many fringes?', type: 'NAT', options: [], correctAnswer: '1', concept: 'Wave Optics' },
+      { text: 'Electron accelerated through 150V. de Broglie wavelength in angstroms is approximately:', type: 'NAT', options: [], correctAnswer: '1', concept: 'Quantum Mechanics' },
+      { text: 'Carnot engine: T_hot=600K, T_cold=300K, absorbs 1000J. Work output in joules is:', type: 'NAT', options: [], correctAnswer: '500', concept: 'Thermodynamics' },
+      { text: 'A solid sphere rolls down an incline of height h without slipping. Velocity at bottom is v=√(10gh/7). If h=3.5m, v is approximately:', type: 'NAT', options: [], correctAnswer: '7', concept: 'Rolling Motion' },
+      { text: 'Two charges +2μC and -2μC separated by 10cm. Electric field at midpoint is (k=9×10⁹):', type: 'MCQ', options: ['14.4×10⁶ N/C','7.2×10⁶ N/C','28.8×10⁶ N/C','0'], correctAnswer: '14.4×10⁶ N/C', concept: 'Dipole Field' },
+      { text: 'An LC circuit has L=1mH, C=1μF. The oscillation frequency in kHz is:', type: 'MCQ', options: ['5.03','15.9','1.59','50.3'], correctAnswer: '5.03', concept: 'LC Oscillations' },
+      { text: 'Photoelectric effect: φ=2eV, photon energy=5eV. Maximum KE of emitted electrons is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Photoelectric Effect' },
+      { text: 'A gas undergoes adiabatic expansion. If γ=1.4 and volume doubles, temperature changes by factor:', type: 'MCQ', options: ['2^0.4','1/2^0.4','2','1/2'], correctAnswer: '1/2^0.4', concept: 'Adiabatic Process' },
+      { text: 'Two identical springs (k=100N/m) in parallel support a 2kg mass. Time period of vertical oscillation is:', type: 'MCQ', options: ['0.2π s','0.1π s','π/5 s','2π/5 s'], correctAnswer: '0.2π s', concept: 'SHM Springs' },
+    ],
+    'Chemistry': [
+      { text: 'For 3d orbital: n=3, l=2. The total number of radial nodes is:', type: 'NAT', options: [], correctAnswer: '0', concept: 'Quantum Numbers' },
+      { text: 'ΔG°=-nFE°. For a cell with E°=1.1V and n=2, ΔG° in kJ/mol is (F=96500):', type: 'MCQ', options: ['-212.3','-106.15','212.3','-96.5'], correctAnswer: '-212.3', concept: 'Electrochemistry' },
+      { text: 'A reaction A→B has rate=k[A]². When [A] is doubled, rate becomes:', type: 'MCQ', options: ['2 times','4 times','8 times','Unchanged'], correctAnswer: '4 times', concept: 'Reaction Order' },
+      { text: 'Crystal field splitting: [Fe(CN)₆]⁴⁻ has how many unpaired electrons? (CN⁻ is strong field)', type: 'NAT', options: [], correctAnswer: '0', concept: 'CFT' },
+      { text: 'Benzaldehyde with dilute NaOH undergoes Cannizzaro. The organic acid product is:', type: 'MCQ', options: ['Benzoic acid','Acetic acid','Formic acid','Phenylacetic acid'], correctAnswer: 'Benzoic acid', concept: 'Organic Reactions' },
+      { text: 'The van\'t Hoff factor for K₃[Fe(CN)₆] is:', type: 'NAT', options: [], correctAnswer: '4', concept: 'Colligative Properties' },
+      { text: 'Optical isomers exist when a molecule has no plane of symmetry. The number of chiral centers in tartaric acid is:', type: 'NAT', options: [], correctAnswer: '2', concept: 'Stereochemistry' },
+      { text: '2-Butanol dehydration gives predominantly:', type: 'MCQ', options: ['1-Butene','2-Butene (Saytzeff)','Butadiene','Isobutylene'], correctAnswer: '2-Butene (Saytzeff)', concept: 'Elimination Reactions' },
+      { text: 'Osmotic pressure π=iCRT. A 0.1M BaCl₂ solution (i=3) at 300K has π (R=0.082):', type: 'MCQ', options: ['7.38 atm','2.46 atm','24.6 atm','0.82 atm'], correctAnswer: '7.38 atm', concept: 'Osmotic Pressure' },
+      { text: 'Half-life of a zero-order reaction with k=0.1 M/s and [A]₀=2M is:', type: 'NAT', options: [], correctAnswer: '10', concept: 'Zero Order Kinetics' },
+    ],
+    'Mathematics': [
+      { text: 'The area bounded by y=x² and y=x from x=0 to x=1 is:', type: 'NAT', options: [], correctAnswer: '0.167', concept: 'Area Between Curves' },
+      { text: 'A conic section has equation x²/16 - y²/9 = 1. Its eccentricity is:', type: 'NAT', options: [], correctAnswer: '1.25', concept: 'Conic Sections' },
+      { text: 'The shortest distance between lines r=(1,2,3)+t(1,0,-1) and r=(2,1,0)+s(0,1,1) is:', type: 'MCQ', options: ['1/√3','2/√3','√3','0'], correctAnswer: '1/√3', concept: '3D Geometry' },
+      { text: 'P(A)=0.6, P(B)=0.5, P(A∪B)=0.8. P(A|B) equals:', type: 'MCQ', options: ['0.3','0.5','0.6','0.8'], correctAnswer: '0.6', concept: 'Conditional Probability' },
+      { text: 'The sum Σ(k=1 to n) k³ = [n(n+1)/2]². For n=5, the sum is:', type: 'NAT', options: [], correctAnswer: '225', concept: 'Series Summation' },
+      { text: '∫₀^(π/2) sin³x dx equals:', type: 'MCQ', options: ['2/3','1/3','4/3','π/4'], correctAnswer: '2/3', concept: 'Definite Integrals' },
+      { text: 'The equation of tangent to y=eˣ at x=0 is:', type: 'MCQ', options: ['y=x+1','y=x','y=x-1','y=2x+1'], correctAnswer: 'y=x+1', concept: 'Application of Derivatives' },
+      { text: 'If f(x)=x³-6x²+9x+1, the number of real roots is:', type: 'NAT', options: [], correctAnswer: '3', concept: 'Calculus + Algebra' },
+      { text: 'The angle between planes 2x+y-z=3 and x-y+2z=5 is:', type: 'MCQ', options: ['60°','90°','45°','30°'], correctAnswer: '60°', concept: '3D Geometry' },
+      { text: 'The matrix [[1,2],[3,4]] has eigenvalues:', type: 'MCQ', options: ['(5+√33)/2 and (5-√33)/2','1 and 4','2 and 3','0 and 5'], correctAnswer: '(5+√33)/2 and (5-√33)/2', concept: 'Linear Algebra' },
+    ],
+  },
+  'UPSC': {
+    'History': [
+      { text: 'Which of the following Indus Valley sites shows evidence of a dockyard? 1.Lothal 2.Kalibangan 3.Dholavira 4.Mohenjodaro', type: 'MCQ', options: ['1 only','1 and 3','2 and 4','1, 2 and 3'], correctAnswer: '1 only', concept: 'Ancient India' },
+      { text: 'Consider: 1.Cripps Mission offered Dominion status after war 2.Cabinet Mission proposed a three-tier federal structure. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both 1 and 2','Neither'], correctAnswer: 'Both 1 and 2', concept: 'Modern India' },
+      { text: 'The Rowlatt Act of 1919 was opposed because it:', type: 'MCQ', options: ['Imposed heavy taxes','Allowed detention without trial','Banned political parties','Restricted press freedom only'], correctAnswer: 'Allowed detention without trial', concept: 'Freedom Movement' },
+      { text: 'Match: A.Subsidiary Alliance-Lord Wellesley B.Doctrine of Lapse-Lord Dalhousie C.Permanent Settlement-Lord Cornwallis. Correct pairs:', type: 'MCQ', options: ['A and B only','B and C only','A, B and C','A and C only'], correctAnswer: 'A, B and C', concept: 'British Policies' },
+      { text: 'The Simon Commission was boycotted because:', type: 'MCQ', options: ['It had no Indian member','It proposed partition','It imposed martial law','It dissolved Congress'], correctAnswer: 'It had no Indian member', concept: 'Freedom Movement' },
+      { text: 'Consider: 1.Gandhara art shows Greek influence 2.Mathura art is purely indigenous. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: 'Both', concept: 'Art and Culture' },
+      { text: 'Arrange chronologically: 1.Quit India 2.Dandi March 3.Non-Cooperation 4.Civil Disobedience', type: 'MCQ', options: ['3,2,4,1','3,4,2,1','2,3,4,1','3,2,1,4'], correctAnswer: '3,2,4,1', concept: 'National Movement Timeline' },
+      { text: 'The Charter Act of 1833 made the Governor-General of Bengal the Governor-General of:', type: 'MCQ', options: ['Bengal Presidency','Madras and Bombay','India','British territories only'], correctAnswer: 'India', concept: 'Constitutional History' },
+      { text: 'Which Mughal emperor abolished Jizya tax?', type: 'MCQ', options: ['Babur','Humayun','Akbar','Shah Jahan'], correctAnswer: 'Akbar', concept: 'Medieval India' },
+      { text: 'The Vernacular Press Act was passed during the Viceroyalty of:', type: 'MCQ', options: ['Lord Lytton','Lord Ripon','Lord Curzon','Lord Dufferin'], correctAnswer: 'Lord Lytton', concept: 'British India Press' },
+    ],
+    'Geography': [
+      { text: 'Consider: 1.Western Ghats are older than Himalayas 2.Eastern Ghats are continuous mountain range. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: '1 only', concept: 'Indian Physiography' },
+      { text: 'The Tropic of Cancer does NOT pass through:', type: 'MCQ', options: ['Rajasthan','Madhya Pradesh','Bihar','Jharkhand'], correctAnswer: 'Bihar', concept: 'Indian Geography' },
+      { text: 'Arrange rivers by length (longest first): 1.Ganga 2.Godavari 3.Krishna 4.Narmada', type: 'MCQ', options: ['1,2,3,4','1,2,4,3','2,1,3,4','1,3,2,4'], correctAnswer: '1,2,3,4', concept: 'Indian Rivers' },
+      { text: 'Jet streams affect Indian monsoon because they:', type: 'MCQ', options: ['Bring moisture from ocean','Shift the position of ITCZ','Create cyclonic conditions','Cool the upper atmosphere only'], correctAnswer: 'Shift the position of ITCZ', concept: 'Monsoon Mechanism' },
+      { text: 'Which soil type is self-ploughing due to its expansion and contraction?', type: 'MCQ', options: ['Alluvial','Black (Regur)','Laterite','Red'], correctAnswer: 'Black (Regur)', concept: 'Indian Soils' },
+      { text: 'Consider: 1.Earthquakes occur at plate boundaries 2.India lies entirely on the Indo-Australian plate. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: 'Both', concept: 'Plate Tectonics' },
+      { text: 'The 180° meridian mostly coincides with the:', type: 'MCQ', options: ['Prime Meridian','International Date Line','Equator','Tropic of Capricorn'], correctAnswer: 'International Date Line', concept: 'World Geography' },
+      { text: 'Western disturbances bring winter rainfall to which part of India?', type: 'MCQ', options: ['South India','North-West India','North-East India','Central India'], correctAnswer: 'North-West India', concept: 'Indian Climate' },
+      { text: 'Mangrove forests in India are most extensive in:', type: 'MCQ', options: ['Kerala coast','Sundarbans','Gulf of Kutch','Andaman Islands'], correctAnswer: 'Sundarbans', concept: 'Indian Vegetation' },
+      { text: 'El Niño weakens the Indian monsoon because:', type: 'MCQ', options: ['It cools the Indian Ocean','It warms eastern Pacific, reducing pressure gradient','It increases Himalayan snowfall','It blocks jet streams'], correctAnswer: 'It warms eastern Pacific, reducing pressure gradient', concept: 'Climate Phenomena' },
+    ],
+    'Polity': [
+      { text: 'Consider: 1.Article 14 guarantees equality before law 2.Article 19 gives 6 freedoms to all persons. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: '1 only', concept: 'Fundamental Rights' },
+      { text: 'A Money Bill can be introduced in:', type: 'MCQ', options: ['Lok Sabha only','Rajya Sabha only','Either House','Joint session'], correctAnswer: 'Lok Sabha only', concept: 'Legislative Process' },
+      { text: 'The 42nd Amendment is called \'Mini Constitution\' because it:', type: 'MCQ', options: ['Added Fundamental Duties','Changed Preamble wording','Made extensive changes to multiple parts','All of the above'], correctAnswer: 'All of the above', concept: 'Constitutional Amendments' },
+      { text: 'Which writ is issued to a person holding public office illegally?', type: 'MCQ', options: ['Habeas Corpus','Mandamus','Quo Warranto','Certiorari'], correctAnswer: 'Quo Warranto', concept: 'Writs' },
+      { text: 'Rajya Sabha can delay a Money Bill for a maximum of:', type: 'MCQ', options: ['30 days','14 days','6 months','No delay possible'], correctAnswer: '14 days', concept: 'Financial Legislation' },
+      { text: 'The concept of \'Basic Structure\' of Constitution was established in:', type: 'MCQ', options: ['Golaknath case','Kesavananda Bharati case','Minerva Mills case','Maneka Gandhi case'], correctAnswer: 'Kesavananda Bharati case', concept: 'Judicial Doctrine' },
+      { text: 'The 73rd Amendment requires reservation of how many seats for women in Panchayats?', type: 'MCQ', options: ['25%','33%','50%','No reservation'], correctAnswer: '33%', concept: 'Local Governance' },
+      { text: 'Which Schedule contains the anti-defection provisions?', type: 'MCQ', options: ['8th Schedule','9th Schedule','10th Schedule','11th Schedule'], correctAnswer: '10th Schedule', concept: 'Anti-Defection' },
+      { text: 'The President can proclaim Financial Emergency under Article:', type: 'NAT', options: [], correctAnswer: '360', concept: 'Emergency Powers' },
+      { text: 'Inter-state disputes regarding water are adjudicated by:', type: 'MCQ', options: ['Supreme Court','High Court','Inter-State Water Tribunal','Parliament'], correctAnswer: 'Inter-State Water Tribunal', concept: 'Federal Relations' },
+    ],
+    'Economy': [
+      { text: 'If CRR is increased by RBI, the effect on money supply is:', type: 'MCQ', options: ['Increases','Decreases','No change','Becomes zero'], correctAnswer: 'Decreases', concept: 'Monetary Policy' },
+      { text: 'Consider: 1.Revenue deficit = Revenue expenditure - Revenue receipts 2.Fiscal deficit includes borrowings. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: 'Both', concept: 'Public Finance' },
+      { text: 'GDP deflator = (Nominal GDP/Real GDP)×100. If nominal GDP=200 and real GDP=160, inflation measured by deflator is:', type: 'NAT', options: [], correctAnswer: '25', concept: 'National Income' },
+      { text: 'GST is a destination-based tax. This means tax revenue goes to:', type: 'MCQ', options: ['State where goods are manufactured','State where goods are consumed','Central government only','Equally to both states'], correctAnswer: 'State where goods are consumed', concept: 'Taxation' },
+      { text: 'Consider: 1.SLR is maintained with RBI 2.CRR is maintained as liquid assets by banks. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither (both are reversed)'], correctAnswer: 'Neither (both are reversed)', concept: 'Banking Ratios' },
+      { text: 'If marginal propensity to consume is 0.8, the fiscal multiplier is:', type: 'NAT', options: [], correctAnswer: '5', concept: 'Keynesian Economics' },
+      { text: 'Which of the following is NOT a function of SEBI?', type: 'MCQ', options: ['Regulate stock exchanges','Protect investor interests','Control inflation','Prohibit insider trading'], correctAnswer: 'Control inflation', concept: 'Capital Markets' },
+      { text: 'The Phillips curve shows an inverse relationship between:', type: 'MCQ', options: ['GDP and inflation','Unemployment and inflation','Interest rate and investment','Savings and consumption'], correctAnswer: 'Unemployment and inflation', concept: 'Macroeconomics' },
+      { text: 'Current Account Deficit includes: 1.Trade deficit 2.Net invisibles 3.Capital transfers. Select correct:', type: 'MCQ', options: ['1 only','1 and 2','1, 2 and 3','2 and 3'], correctAnswer: '1 and 2', concept: 'External Sector' },
+      { text: 'The base effect in inflation means that:', type: 'MCQ', options: ['Higher base year lowers current inflation rate','Lower base year lowers inflation','Base year has no effect','It only affects WPI'], correctAnswer: 'Higher base year lowers current inflation rate', concept: 'Inflation Analysis' },
+    ],
+    'Science and Technology': [
+      { text: 'Consider: 1.Chandrayaan-3 landed near the lunar south pole 2.ISRO used a cryogenic upper stage for GSLV. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: 'Both', concept: 'Space Technology' },
+      { text: 'CRISPR-Cas9 edits DNA by:', type: 'MCQ', options: ['Adding new chromosomes','Cutting DNA at specific sequences','Changing RNA only','Inserting plasmids randomly'], correctAnswer: 'Cutting DNA at specific sequences', concept: 'Gene Editing' },
+      { text: 'Quantum computing uses qubits which can be in superposition. This means:', type: 'MCQ', options: ['They are faster classical bits','They can be 0 and 1 simultaneously','They use quantum tunneling only','They operate at room temperature'], correctAnswer: 'They can be 0 and 1 simultaneously', concept: 'Quantum Technology' },
+      { text: 'Consider: 1.mRNA vaccines use weakened virus 2.mRNA vaccines instruct cells to produce spike protein. Which is/are correct?', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: '2 only', concept: 'Vaccine Technology' },
+      { text: 'Blockchain ensures data integrity through:', type: 'MCQ', options: ['Central server validation','Cryptographic hashing and consensus','Firewall protection','Password encryption only'], correctAnswer: 'Cryptographic hashing and consensus', concept: 'Information Technology' },
+      { text: 'Nuclear fusion is preferred over fission because: 1.No radioactive waste 2.Fuel (hydrogen) is abundant. Select correct:', type: 'MCQ', options: ['1 only','2 only','Both','Neither'], correctAnswer: '2 only', concept: 'Nuclear Energy' },
+      { text: 'The GPS system requires a minimum of how many satellites for 3D positioning?', type: 'NAT', options: [], correctAnswer: '4', concept: 'Navigation Technology' },
+      { text: 'India\'s NavIC navigation system covers which region?', type: 'MCQ', options: ['Global coverage','India and 1500km beyond borders','Asia only','Northern hemisphere'], correctAnswer: 'India and 1500km beyond borders', concept: 'Indian Space Tech' },
+      { text: '5G\'s key advantage over 4G is:', type: 'MCQ', options: ['Higher frequency only','Low latency and higher bandwidth','Longer range','Lower power consumption only'], correctAnswer: 'Low latency and higher bandwidth', concept: 'Telecom Technology' },
+      { text: 'Green hydrogen is produced by:', type: 'MCQ', options: ['Steam methane reforming','Electrolysis using renewable energy','Coal gasification','Nuclear power'], correctAnswer: 'Electrolysis using renewable energy', concept: 'Clean Energy' },
+    ],
+  },
+};
+
+// ═══════════════════════════════════════════════════════════════════════════
+// getParaphrasedPYQs — Picks random PYQs and sends them to AI for
+// paraphrasing. Returns questions in the same format as AI-generated ones.
+// ═══════════════════════════════════════════════════════════════════════════
+export function pickRandomPYQs(examName, topic, count = 8) {
+  const examBank = PYQ_BANK[examName];
+  if (!examBank) return [];
+  const topicBank = examBank[topic];
+  if (!topicBank || topicBank.length === 0) return [];
+
+  // Shuffle and pick 'count' questions
+  const shuffled = [...topicBank].sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, Math.min(count, shuffled.length));
+}
+
+export function buildParaphrasePrompt(questions, examName, topic) {
+  const qList = questions.map((q, i) => {
+    const opts = q.options.length > 0
+      ? `\nOptions: ${q.options.map((o, j) => `${String.fromCharCode(65+j)}. ${o}`).join(' | ')}`
+      : ' [NAT — numerical answer]';
+    return `Q${i+1}. ${q.text}${opts}\nCorrect Answer: ${q.correctAnswer}\nConcept: ${q.concept}`;
+  }).join('\n\n');
+
+  return `You are an expert ${examName} question paraphraser for the topic "${topic}".
+
+TASK: Paraphrase each question below. Follow these rules STRICTLY:
+
+FOR MCQ QUESTIONS:
+- Rewrite the question text using different words but SAME concept
+- Rewrite ALL options using different wording but keep the meaning
+- The correct answer must map to the SAME reworded option
+- Shuffle the order of options randomly
+
+FOR NAT (Numerical) QUESTIONS:
+- Change the numerical values in the question (different numbers)
+- Recalculate the correct answer based on new values
+- Show your calculation in "reasoning"
+
+FOR ALL QUESTIONS:
+- Keep the same difficulty level
+- Keep the same concept tag
+- Keep the same question type (MCQ/NAT)
+- The question must still be about "${topic}" for "${examName}"
+- Add "reasoning" field with 2-3 sentence explanation
+
+ORIGINAL QUESTIONS:
+${qList}
+
+Return ONLY a valid JSON array:
+[{"text":"paraphrased question","type":"MCQ","options":["opt1","opt2","opt3","opt4"],"correctAnswer":"correct option text","reasoning":"brief explanation","marks":2,"negativeMarks":0.67,"concept":"same concept"},...]`;
+}
+
 export default SUBJECT_KNOWLEDGE;

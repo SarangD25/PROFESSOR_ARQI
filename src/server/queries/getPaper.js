@@ -1,6 +1,6 @@
 import { hashToken, verifyQRSignature } from '../utils/crypto.js';
 import { callAI } from '../utils/aiProvider.js';
-import { getSubjectKnowledge } from '../utils/subjectKnowledge.js';
+import { getSubjectKnowledge, pickRandomPYQs, buildParaphrasePrompt } from '../utils/subjectKnowledge.js';
 
 function withTimeout(promise, ms) {
   return Promise.race([
@@ -584,7 +584,36 @@ Return ONLY a valid JSON array, no text before or after:
       questions = filtered.length >= 3 ? filtered : questions;
     }
 
-    // Batch verification pass (1 extra API call)
+    // ── PYQ Paraphrasing Pipeline ──────────────────────────────────────────
+    // Pick random PYQs from the bank and send to AI for paraphrasing.
+    // Merge paraphrased PYQs with AI-generated originals for a hybrid paper.
+    const pyqOriginals = pickRandomPYQs(campaign.examName, campaign.topic, 8);
+    let paraphrasedPYQs = [];
+    if (pyqOriginals.length > 0) {
+      try {
+        console.log('[PYQ] Paraphrasing', pyqOriginals.length, 'PYQs for', campaign.examName, '-', campaign.topic);
+        const paraphrasePrompt = buildParaphrasePrompt(pyqOriginals, campaign.examName, campaign.topic);
+        const pyqResponse = await withTimeout(callAI(paraphrasePrompt), 20000);
+        const parsed = parseQuestions(pyqResponse);
+        if (parsed && parsed.length > 0) {
+          paraphrasedPYQs = parsed;
+          console.log('[PYQ] Successfully paraphrased', paraphrasedPYQs.length, 'questions');
+        }
+      } catch (pyqErr) {
+        console.error('[PYQ] Paraphrasing failed:', pyqErr.message, '— using AI-only questions');
+      }
+    }
+
+    // Merge: take AI originals + paraphrased PYQs, shuffle, trim to 15
+    if (paraphrasedPYQs.length > 0 && questions && questions.length > 0) {
+      // Keep 7 AI originals + up to 8 paraphrased PYQs = 15 total
+      const aiSlice = questions.slice(0, 7);
+      const pyqSlice = paraphrasedPYQs.slice(0, 8);
+      questions = [...aiSlice, ...pyqSlice].sort(() => Math.random() - 0.5);
+      console.log('[PYQ] Merged paper:', aiSlice.length, 'AI +', pyqSlice.length, 'PYQ =', questions.length, 'total');
+    }
+
+    // Batch verification pass (1 extra API call) — runs on ALL questions
     if (questions && questions.length > 0) {
       questions = await verifyQuestions(questions, campaign);
     }
