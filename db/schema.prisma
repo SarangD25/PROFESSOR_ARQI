@@ -1,0 +1,180 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  role      String   @default("student")
+  createdAt DateTime @default(now())
+  auth      Auth?
+}
+
+model Organization {
+  id          String       @id @default(cuid())
+  name        String       @unique
+  teacherId   String
+  createdAt   DateTime     @default(now())
+  students    OrgStudent[]
+  campaigns   Campaign[]
+  assessments Assessment[]
+  config      OrgConfig?
+}
+
+model OrgStudent {
+  id          String       @id @default(cuid())
+  name        String
+  rollNo      String
+  section     String       @default("")
+  orgId       String
+  org         Organization @relation(fields: [orgId], references: [id])
+  qrPapers    QRPaper[]
+  assessments Assessment[]
+  createdAt   DateTime     @default(now())
+
+  @@unique([rollNo, orgId])
+}
+
+model Campaign {
+  id         String        @id @default(cuid())
+  title      String
+  examName   String
+  topic      String
+  difficulty String
+  deadline   DateTime
+  teacherId  String
+  orgId      String?
+  mode       String        @default("individual")
+  createdAt  DateTime      @default(now())
+  org        Organization? @relation(fields: [orgId], references: [id])
+  qrPapers   QRPaper[]
+}
+
+model QRPaper {
+  id           String        @id @default(cuid())
+  token        String        @unique
+  signature    String
+  studentId    String?
+  orgStudentId String?
+  campaignId   String
+  isUsed       Boolean       @default(false)
+  difficulty   String?
+  createdAt    DateTime      @default(now())
+  campaign     Campaign      @relation(fields: [campaignId], references: [id])
+  orgStudent   OrgStudent?   @relation(fields: [orgStudentId], references: [id])
+  questionSets QuestionSet[]
+}
+
+model QuestionSet {
+  id           String    @id @default(cuid())
+  qrPaperId    String
+  questions    Json
+  version      Int       @default(1)
+  weakConcepts Json?
+  createdAt    DateTime  @default(now())
+  qrPaper      QRPaper   @relation(fields: [qrPaperId], references: [id])
+  attempts     Attempt[]
+}
+
+model Attempt {
+  id            String      @id @default(cuid())
+  studentId     String?
+  orgStudentId  String?
+  questionSetId String
+  answers       Json
+  score         Float
+  totalMarks    Float
+  weakAreas     Json
+  submittedAt   DateTime    @default(now())
+  questionSet   QuestionSet @relation(fields: [questionSetId], references: [id])
+}
+
+model WeakArea {
+  id        String   @id @default(cuid())
+  studentId String
+  concept   String
+  strength  Float
+  updatedAt DateTime @updatedAt
+
+  @@unique([studentId, concept])
+}
+
+model PyqChunk {
+  id        String  @id @default(cuid())
+  examName  String
+  topic     String
+  content   String
+  source    String?
+  embedding Json?
+  metadata  Json?
+}
+
+model Assessment {
+  id           String       @id @default(cuid())
+  orgStudentId String
+  orgStudent   OrgStudent   @relation(fields: [orgStudentId], references: [id])
+  orgId        String
+  org          Organization @relation(fields: [orgId], references: [id])
+  type         String
+  title        String
+  description  String?
+  marks        Float
+  maxMarks     Float
+  date         DateTime     @default(now())
+  createdBy    String
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+}
+
+model GeneratedQuestionPool {
+  id        String   @id @default(cuid())
+  topic     String
+  examName  String
+  text      String
+  concept   String
+  type      String
+  createdAt DateTime @default(now())
+
+  @@index([topic, examName])
+}
+
+model OrgConfig {
+  id                String       @id @default(cuid())
+  orgId             String       @unique
+  org               Organization @relation(fields: [orgId], references: [id])
+  weightAssignment  Float        @default(0.3)
+  weightBehavior    Float        @default(0.1)
+  weightPerformance Float        @default(0.2)
+  weightClassTest   Float        @default(0.4)
+}
+
+model Auth {
+  id         String         @id @default(uuid())
+  userId     String?        @unique
+  user       User?          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  identities AuthIdentity[]
+  sessions   Session[]
+}
+
+model AuthIdentity {
+  providerName   String
+  providerUserId String
+  providerData   String @default("{}")
+  authId         String
+  auth           Auth   @relation(fields: [authId], references: [id], onDelete: Cascade)
+
+  @@id([providerName, providerUserId])
+}
+
+model Session {
+  id        String   @id @unique
+  expiresAt DateTime
+  userId    String
+  auth      Auth     @relation(references: [id], fields: [userId], onDelete: Cascade)
+
+  @@index([userId])
+}

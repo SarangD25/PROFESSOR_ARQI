@@ -1,0 +1,5 @@
+import { type User, type Organization, type OrgStudent, type Campaign, type QRPaper, type QuestionSet, type Attempt, type WeakArea, type PyqChunk, type Assessment, type GeneratedQuestionPool, type OrgConfig } from "@prisma/client";
+export { type User, type Organization, type OrgStudent, type Campaign, type QRPaper, type QuestionSet, type Attempt, type WeakArea, type PyqChunk, type Assessment, type GeneratedQuestionPool, type OrgConfig, type Auth, type AuthIdentity, } from "@prisma/client";
+export type Entity = User | Organization | OrgStudent | Campaign | QRPaper | QuestionSet | Attempt | WeakArea | PyqChunk | Assessment | GeneratedQuestionPool | OrgConfig | never;
+export type EntityName = "User" | "Organization" | "OrgStudent" | "Campaign" | "QRPaper" | "QuestionSet" | "Attempt" | "WeakArea" | "PyqChunk" | "Assessment" | "GeneratedQuestionPool" | "OrgConfig" | never;
+//# sourceMappingURL=index.d.ts.map

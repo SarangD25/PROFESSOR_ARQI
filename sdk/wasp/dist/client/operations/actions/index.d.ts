@@ -1,0 +1,26 @@
+import { type ActionFor } from './core';
+import { CreateOrganization_ext } from 'wasp/server/operations/actions';
+import { AddOrgStudents_ext } from 'wasp/server/operations/actions';
+import { CreateCampaign_ext } from 'wasp/server/operations/actions';
+import { GenerateSecureQR_ext } from 'wasp/server/operations/actions';
+import { CreateIndividualSession_ext } from 'wasp/server/operations/actions';
+import { GenerateBulkQR_ext } from 'wasp/server/operations/actions';
+import { SubmitAttempt_ext } from 'wasp/server/operations/actions';
+import { CreateAssessment_ext } from 'wasp/server/operations/actions';
+import { DeleteAssessment_ext } from 'wasp/server/operations/actions';
+import { UpdateOrgConfig_ext } from 'wasp/server/operations/actions';
+import { DeletePaper_ext } from 'wasp/server/operations/actions';
+import { DeleteCampaign_ext } from 'wasp/server/operations/actions';
+export declare const createOrganization: ActionFor<CreateOrganization_ext>;
+export declare const addOrgStudents: ActionFor<AddOrgStudents_ext>;
+export declare const createCampaign: ActionFor<CreateCampaign_ext>;
+export declare const generateSecureQR: ActionFor<GenerateSecureQR_ext>;
+export declare const createIndividualSession: ActionFor<CreateIndividualSession_ext>;
+export declare const generateBulkQR: ActionFor<GenerateBulkQR_ext>;
+export declare const submitAttempt: ActionFor<SubmitAttempt_ext>;
+export declare const createAssessment: ActionFor<CreateAssessment_ext>;
+export declare const deleteAssessment: ActionFor<DeleteAssessment_ext>;
+export declare const updateOrgConfig: ActionFor<UpdateOrgConfig_ext>;
+export declare const deletePaper: ActionFor<DeletePaper_ext>;
+export declare const deleteCampaign: ActionFor<DeleteCampaign_ext>;
+//# sourceMappingURL=index.d.ts.map

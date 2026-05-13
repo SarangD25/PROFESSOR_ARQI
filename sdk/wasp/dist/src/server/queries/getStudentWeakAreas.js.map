@@ -1,0 +1,1 @@
+{"version":3,"file":"getStudentWeakAreas.js","sourceRoot":"","sources":["../../../../src/server/queries/getStudentWeakAreas.js"],"names":[],"mappings":"AAAA,MAAM,CAAC,KAAK,UAAU,mBAAmB,CAAC,IAAI,EAAE,OAAO;IACrD,MAAM,SAAS,GAAG,OAAO,CAAC,IAAI,CAAC,EAAE,CAAC;IAClC,OAAO,OAAO,CAAC,QAAQ,CAAC,QAAQ,CAAC,QAAQ,CAAC,EAAE,KAAK,EAAE,EAAE,SAAS,EAAE,EAAE,CAAC,CAAC;AACtE,CAAC"}

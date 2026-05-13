@@ -1,0 +1,56 @@
+import { Router } from "express";
+import { getLoginRoute } from "../email/login.js";
+import { getSignupRoute } from "../email/signup.js";
+import { getRequestPasswordResetRoute } from "../email/requestPasswordReset.js";
+import { resetPassword } from "../email/resetPassword.js";
+import { verifyEmail } from "../email/verifyEmail.js";
+import { defineHandler } from "wasp/server/utils";
+const _waspUserSignupFields = undefined;
+const _waspGetVerificationEmailContent = ({ verificationLink }) => ({
+    subject: 'Verify your email',
+    text: `Click the link below to verify your email: ${verificationLink}`,
+    html: `
+        <p>Click the link below to verify your email</p>
+        <a href="${verificationLink}">Verify email</a>
+    `,
+});
+const _waspGetPasswordResetEmailContent = ({ passwordResetLink }) => ({
+    subject: 'Reset your password',
+    text: `Click the link below to reset your password: ${passwordResetLink}`,
+    html: `
+        <p>Click the link below to reset your password</p>
+        <a href="${passwordResetLink}">Reset password</a>
+    `,
+});
+const fromField = {
+    name: 'Professor ARQI',
+    email: 'admin@professorqrai.com',
+};
+const config = {
+    id: "email",
+    displayName: "Email and password",
+    createRouter() {
+        const router = Router();
+        const loginRoute = defineHandler(getLoginRoute());
+        router.post('/login', loginRoute);
+        const signupRoute = defineHandler(getSignupRoute({
+            userSignupFields: _waspUserSignupFields,
+            fromField,
+            clientRoute: '/email-verification',
+            getVerificationEmailContent: _waspGetVerificationEmailContent,
+            isEmailAutoVerified: false,
+        }));
+        router.post('/signup', signupRoute);
+        const requestPasswordResetRoute = defineHandler(getRequestPasswordResetRoute({
+            fromField,
+            clientRoute: '/password-reset',
+            getPasswordResetEmailContent: _waspGetPasswordResetEmailContent,
+        }));
+        router.post('/request-password-reset', requestPasswordResetRoute);
+        router.post('/reset-password', defineHandler(resetPassword));
+        router.post('/verify-email', defineHandler(verifyEmail));
+        return router;
+    },
+};
+export default config;
+//# sourceMappingURL=email.js.map
