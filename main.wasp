@@ -4,7 +4,7 @@ app professorArqi {
   },
   title: "Professor ARQI",
   emailSender: {
-    provider: Dummy
+    provider: SMTP
   },
   client: {
     rootComponent: import { RootComponent } from "@src/client/RootComponent.jsx"
